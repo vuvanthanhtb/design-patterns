@@ -64,7 +64,10 @@ export function LessonPlayer(props: Props) {
       const target = Math.max(0, Math.min(last, to));
       setStep(target);
       setPlayKey((k) => k + 1);
-      if (fromUser) setAnnounce(`Bước ${target + 1} / ${steps.length}: ${steps[target].label}`);
+      if (fromUser)
+        setAnnounce(
+          `Bước ${target + 1} / ${steps.length}: ${steps[target].label}`,
+        );
     },
     [last, steps],
   );
@@ -117,7 +120,8 @@ export function LessonPlayer(props: Props) {
 
   // Tạm dừng khi tab bị ẩn
   useEffect(() => {
-    const onHide = () => document.visibilityState === "hidden" && setPlaying(false);
+    const onHide = () =>
+      document.visibilityState === "hidden" && setPlaying(false);
     document.addEventListener("visibilitychange", onHide);
     return () => document.removeEventListener("visibilitychange", onHide);
   }, []);
@@ -163,13 +167,19 @@ export function LessonPlayer(props: Props) {
   const relCount = p.diagram.relations.length;
 
   return (
-    <div className="lesson" data-motion-root data-motion-mode="step" data-step-count={steps.length}>
+    <div
+      className="lesson"
+      data-motion-root
+      data-motion-mode="step"
+      data-step-count={steps.length}
+    >
       {/* ─────────── Cột giữa ─────────── */}
       <section className="lesson-main card">
         <header className="lesson-head">
           <div>
             <p className="crumb">
-              {props.categoryNum}. {props.categoryLabel} <span>/</span> Bài {props.lessonInCategory.n} của {props.lessonInCategory.of}
+              {props.categoryNum}. {props.categoryLabel} <span>/</span> Bài{" "}
+              {props.lessonInCategory.n} của {props.lessonInCategory.of}
             </p>
             <h1>{p.name}</h1>
             <p className="subtitle">
@@ -198,11 +208,23 @@ export function LessonPlayer(props: Props) {
               <Stat label="NHÓM" value={props.categoryLabel} />
               <Stat label="LỚP" value={String(p.diagram.classes.length)} />
               <Stat label="QUAN HỆ" value={String(relCount)} />
-              <Stat label="BƯỚC CHẠY" value={flowIndex === null ? `${seq.steps.length}` : `${flowIndex + 1}/${seq.steps.length}`} />
+              <Stat
+                label="BƯỚC CHẠY"
+                value={
+                  flowIndex === null
+                    ? `${seq.steps.length}`
+                    : `${flowIndex + 1}/${seq.steps.length}`
+                }
+              />
             </div>
             {!reduced && (
               <div className="controls" data-motion-controls>
-                <button type="button" className="btn" data-motion-action="replay" onClick={replay}>
+                <button
+                  type="button"
+                  className="btn"
+                  data-motion-action="replay"
+                  onClick={replay}
+                >
                   <IconReplay size={13} />
                   Phát lại
                 </button>
@@ -241,12 +263,22 @@ export function LessonPlayer(props: Props) {
             )}
             {(cur.kind === "structure" || cur.kind === "recap") && (
               <div className="diagram-wrap">
-                <UmlDiagram diagram={p.diagram} id={`cls-${p.slug}`} title={`Sơ đồ lớp UML — ${p.name}`} />
+                <UmlDiagram
+                  diagram={p.diagram}
+                  id={`cls-${p.slug}`}
+                  title={`Sơ đồ lớp UML — ${p.name}`}
+                />
               </div>
             )}
             {cur.kind === "flow" && (
               <div className="diagram-wrap">
-                <SequenceDiagram seq={seq} id={`seq-${p.slug}`} title={`Sơ đồ tuần tự — ${p.name}`} current={reduced ? null : flowIndex} playKey={playKey} />
+                <SequenceDiagram
+                  seq={seq}
+                  id={`seq-${p.slug}`}
+                  title={`Sơ đồ tuần tự — ${p.name}`}
+                  current={reduced ? null : flowIndex}
+                  playKey={playKey}
+                />
               </div>
             )}
             {cur.kind === "code" && (
@@ -255,9 +287,20 @@ export function LessonPlayer(props: Props) {
                   code={lang === "ts" ? example.typescript : example.java}
                   filename={lang === "ts" ? `${p.slug}.ts` : example.javaFile}
                   tabs={
-                    <div className="lang-tabs" role="tablist" aria-label="Ngôn ngữ">
+                    <div
+                      className="lang-tabs"
+                      role="tablist"
+                      aria-label="Ngôn ngữ"
+                    >
                       {(["ts", "java"] as const).map((l) => (
-                        <button key={l} type="button" role="tab" aria-selected={lang === l} className={lang === l ? "on" : undefined} onClick={() => setLang(l)}>
+                        <button
+                          key={l}
+                          type="button"
+                          role="tab"
+                          aria-selected={lang === l}
+                          className={lang === l ? "on" : undefined}
+                          onClick={() => setLang(l)}
+                        >
                           {l === "ts" ? "TypeScript" : "Java"}
                         </button>
                       ))}
@@ -265,7 +308,11 @@ export function LessonPlayer(props: Props) {
                   }
                 />
                 <Terminal
-                  command={lang === "ts" ? `node ${p.slug}.ts` : `java ${example.javaFile}`}
+                  command={
+                    lang === "ts"
+                      ? `node ${p.slug}.ts`
+                      : `java ${example.javaFile}`
+                  }
                   lines={lang === "ts" ? example.tsOutput : example.javaOutput}
                 />
               </div>
@@ -289,7 +336,9 @@ export function LessonPlayer(props: Props) {
                 </span>
               </>
             ) : cur.kind === "code" ? (
-              <span>Output ở trên là kết quả chạy thật, được ghi cứng trong dữ liệu</span>
+              <span>
+                Output ở trên là kết quả chạy thật, được ghi cứng trong dữ liệu
+              </span>
             ) : (
               <span>
                 <i className="lg lg-focal" /> thành phần trọng tâm của mẫu
@@ -307,7 +356,10 @@ export function LessonPlayer(props: Props) {
           </div>
           <ol>
             {steps.map((s, i) => (
-              <li key={i} className={i === step ? "on" : i < step ? "done" : undefined}>
+              <li
+                key={i}
+                className={i === step ? "on" : i < step ? "done" : undefined}
+              >
                 <button
                   type="button"
                   onClick={() => {
@@ -332,13 +384,20 @@ export function LessonPlayer(props: Props) {
             <span>
               BƯỚC {step + 1} / {steps.length}
             </span>
-            <span className={`badge ${BADGE_CLASS[cur.kind]}`}>{cur.badge}</span>
+            <span className={`badge ${BADGE_CLASS[cur.kind]}`}>
+              {cur.badge}
+            </span>
           </div>
           <div className="narrate-body" key={step}>
             <Narration step={cur} pattern={p} seq={seq} example={example} />
           </div>
           <div className="narrate-nav">
-            <button type="button" className="btn btn-ghost" disabled={step === 0} onClick={() => go(step - 1)}>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              disabled={step === 0}
+              onClick={() => go(step - 1)}
+            >
               <IconArrowLeft size={13} />
               Lùi
             </button>
@@ -369,8 +428,15 @@ export function LessonPlayer(props: Props) {
             <kbd>←</kbd>
             <kbd>→</kbd> bước · <kbd>R</kbd> lại · <kbd>Space</kbd> chạy
           </p>
-          <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">
-            {reduced ? "Hoạt ảnh bị tắt theo cài đặt giảm chuyển động; sơ đồ hiển thị đầy đủ." : announce}
+          <p
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="sr-only"
+          >
+            {reduced
+              ? "Hoạt ảnh bị tắt theo cài đặt giảm chuyển động; sơ đồ hiển thị đầy đủ."
+              : announce}
           </p>
         </section>
 
@@ -406,7 +472,17 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Narration({ step, pattern: p, seq, example }: { step: LessonStep; pattern: Pattern; seq: Sequence; example: ExampleCode }) {
+function Narration({
+  step,
+  pattern: p,
+  seq,
+  example,
+}: {
+  step: LessonStep;
+  pattern: Pattern;
+  seq: Sequence;
+  example: ExampleCode;
+}) {
   switch (step.kind) {
     case "problem":
       return (
@@ -463,7 +539,10 @@ function Narration({ step, pattern: p, seq, example }: { step: LessonStep; patte
       return (
         <>
           <h2>Code chạy được</h2>
-          <p>Cùng một kịch bản, viết bằng TypeScript và Java. Chuyển tab ở đầu khung code để so sánh.</p>
+          <p>
+            Cùng một kịch bản, viết bằng TypeScript và Java. Chuyển tab ở đầu
+            khung code để so sánh.
+          </p>
           <KeyIdea title="CHẠY THỬ">
             <code>node {p.slug}.ts</code>
             <br />
@@ -503,9 +582,16 @@ function Narration({ step, pattern: p, seq, example }: { step: LessonStep; patte
   }
 }
 
-const label = (seq: Sequence, id: string) => seq.participants.find((x) => x.id === id)?.label ?? id;
+const label = (seq: Sequence, id: string) =>
+  seq.participants.find((x) => x.id === id)?.label ?? id;
 
-function KeyIdea({ title, children }: { title: string; children: React.ReactNode }) {
+function KeyIdea({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="key-idea">
       <span className="ki-icon">

@@ -18,22 +18,30 @@ try {
 }
 
 let failed = 0;
-for (const file of readdirSync(dir).filter((f) => f.endsWith(".ts") && f !== "index.ts").sort()) {
+for (const file of readdirSync(dir)
+  .filter((f) => f.endsWith(".ts") && f !== "index.ts")
+  .sort()) {
   const slug = file.slice(0, -3);
   const mod = await import(pathToFileURL(join(dir, file)).href);
   const ex = Object.values(mod)[0];
   const tsFile = join(tmp, `${slug}.ts`);
   writeFileSync(tsFile, ex.typescript + "\n\nexport {};\n");
-  const tsOut = execFileSync(process.execPath, ["--no-warnings", tsFile], { encoding: "utf8" }).trimEnd();
+  const tsOut = execFileSync(process.execPath, ["--no-warnings", tsFile], {
+    encoding: "utf8",
+  }).trimEnd();
   const okTs = tsOut === ex.tsOutput.join("\n");
   let okJava = true;
   if (hasJava) {
     const javaFile = join(tmp, ex.javaFile);
     writeFileSync(javaFile, ex.java + "\n");
-    okJava = execFileSync("java", [javaFile], { encoding: "utf8" }).trimEnd() === ex.javaOutput.join("\n");
+    okJava =
+      execFileSync("java", [javaFile], { encoding: "utf8" }).trimEnd() ===
+      ex.javaOutput.join("\n");
   }
   if (!okTs || !okJava) failed++;
-  console.log(`${okTs ? "✓" : "✗"} ts  ${hasJava ? (okJava ? "✓" : "✗") : "-"} java  ${slug}`);
+  console.log(
+    `${okTs ? "✓" : "✗"} ts  ${hasJava ? (okJava ? "✓" : "✗") : "-"} java  ${slug}`,
+  );
 }
 if (failed) {
   console.error(`\n${failed} ví dụ có output khác dữ liệu đã lưu`);

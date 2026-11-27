@@ -5,13 +5,13 @@ export const singleton = {
     "→ Mở kết nối database (chỉ một lần)",
     "#1 SELECT * FROM users",
     "#2 SELECT * FROM orders",
-    "Cùng một instance: true"
+    "Cùng một instance: true",
   ],
   javaOutput: [
     "→ Mở kết nối database (chỉ một lần)",
     "#1 SELECT * FROM users",
     "#2 SELECT * FROM orders",
-    "Cùng một instance: true"
+    "Cùng một instance: true",
   ],
   typescript: `class Database {
   // Instance duy nhất, được giữ trong field tĩnh

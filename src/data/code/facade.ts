@@ -3,19 +3,19 @@ export const facade = {
   javaFile: "FacadeDemo.java",
   tsOutput: [
     "Bắt đầu chuyển đổi…",
-    "  CodecFactory: phát hiện codec \"ogg\"",
+    '  CodecFactory: phát hiện codec "ogg"',
     "  BitrateReader: đọc holiday.ogg bằng ogg",
     "  BitrateReader: chuyển buffer(holiday.ogg) → mp4",
     "  AudioMixer: cân bằng âm thanh",
-    "Kết quả: holiday.ogg.mp4"
+    "Kết quả: holiday.ogg.mp4",
   ],
   javaOutput: [
     "Bắt đầu chuyển đổi…",
-    "  CodecFactory: phát hiện codec \"ogg\"",
+    '  CodecFactory: phát hiện codec "ogg"',
     "  BitrateReader: đọc holiday.ogg bằng ogg",
     "  BitrateReader: chuyển buffer(holiday.ogg) → mp4",
     "  AudioMixer: cân bằng âm thanh",
-    "Kết quả: holiday.ogg.mp4"
+    "Kết quả: holiday.ogg.mp4",
   ],
   typescript: `// ── Hệ thống con phức tạp (giả lập một thư viện xử lý video) ──
 class VideoFile {

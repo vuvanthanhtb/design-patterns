@@ -17,8 +17,12 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Design Patterns · 23 mẫu GoF", template: "%s · Design Patterns" },
-  description: "Học 23 mẫu thiết kế GoF qua sơ đồ UML động, ví dụ TypeScript và Java.",
+  title: {
+    default: "Design Patterns · 23 mẫu GoF",
+    template: "%s · Design Patterns",
+  },
+  description:
+    "Học 23 mẫu thiết kế GoF qua sơ đồ UML động, ví dụ TypeScript và Java.",
 };
 
 // Áp theme đã lưu trước lần paint đầu tiên để không bị nháy.

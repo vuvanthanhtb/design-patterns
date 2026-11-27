@@ -5,13 +5,13 @@ export const prototype = {
     "Circle(r=20, red) tại (0, 0)",
     "Circle(r=20, red) tại (100, 0)",
     "Rectangle(85x54, blue) tại (0, 0)",
-    "a và b là hai đối tượng khác nhau: true"
+    "a và b là hai đối tượng khác nhau: true",
   ],
   javaOutput: [
     "Circle(r=20, red) tại (0, 0)",
     "Circle(r=20, red) tại (100, 0)",
     "Rectangle(85x54, blue) tại (0, 0)",
-    "a và b là hai đối tượng khác nhau: true"
+    "a và b là hai đối tượng khác nhau: true",
   ],
   typescript: `// Prototype
 abstract class Shape {

@@ -5,13 +5,13 @@ export const chainOfResponsibility = {
     "⛔ 401 — chưa đăng nhập",
     "⛔ 400 — thiếu email",
     "✅ 200 OK — request hợp lệ",
-    "⛔ 429 — quá nhiều request"
+    "⛔ 429 — quá nhiều request",
   ],
   javaOutput: [
     "⛔ 401 — chưa đăng nhập",
     "⛔ 400 — thiếu email",
     "✅ 200 OK — request hợp lệ",
-    "⛔ 429 — quá nhiều request"
+    "⛔ 429 — quá nhiều request",
   ],
   typescript: `interface Request {
   user?: string;

@@ -1,16 +1,8 @@
 // Dữ liệu cứng: mã nguồn ví dụ interpreter (TypeScript + Java) và output đã chạy thật.
 export const interpreter = {
   javaFile: "InterpreterDemo.java",
-  tsOutput: [
-    "Cây cú pháp: (x + 2) * y",
-    "x=3, y=4  → 20",
-    "x=10, y=5 → 60"
-  ],
-  javaOutput: [
-    "Cây cú pháp: (x + 2) * y",
-    "x=3, y=4  → 20",
-    "x=10, y=5 → 60"
-  ],
+  tsOutput: ["Cây cú pháp: (x + 2) * y", "x=3, y=4  → 20", "x=10, y=5 → 60"],
+  javaOutput: ["Cây cú pháp: (x + 2) * y", "x=3, y=4  → 20", "x=10, y=5 → 60"],
   typescript: `// Context: thông tin toàn cục cho việc thông dịch
 class Context {
   private vars: Map<string, number>;

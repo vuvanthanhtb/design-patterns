@@ -5,7 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { NAV_INDEX } from "@/data/nav";
 import { IconSearch } from "./Icons";
 
-const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").toLowerCase();
+const fold = (s: string) =>
+  s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").toLowerCase();
 
 export function SearchBox() {
   const router = useRouter();
@@ -17,7 +18,9 @@ export function SearchBox() {
   const results = useMemo(() => {
     const k = fold(q.trim());
     if (!k) return NAV_INDEX.slice(0, 8);
-    return NAV_INDEX.filter((p) => fold(`${p.name} ${p.viName} ${p.intent} ${p.category}`).includes(k)).slice(0, 8);
+    return NAV_INDEX.filter((p) =>
+      fold(`${p.name} ${p.viName} ${p.intent} ${p.category}`).includes(k),
+    ).slice(0, 8);
   }, [q]);
 
   useEffect(() => {
@@ -40,7 +43,12 @@ export function SearchBox() {
   };
 
   return (
-    <div className="search" onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setOpen(false)}>
+    <div
+      className="search"
+      onBlur={(e) =>
+        !e.currentTarget.contains(e.relatedTarget) && setOpen(false)
+      }
+    >
       <IconSearch />
       <input
         ref={input}
@@ -71,10 +79,17 @@ export function SearchBox() {
       <kbd>⌘K</kbd>
       {open && (
         <ul className="search-results" role="listbox">
-          {results.length === 0 && <li className="search-empty">Không tìm thấy mẫu nào</li>}
+          {results.length === 0 && (
+            <li className="search-empty">Không tìm thấy mẫu nào</li>
+          )}
           {results.map((r, i) => (
             <li key={r.slug} role="option" aria-selected={i === active}>
-              <button type="button" className={i === active ? "on" : undefined} onMouseEnter={() => setActive(i)} onClick={() => go(r.slug)}>
+              <button
+                type="button"
+                className={i === active ? "on" : undefined}
+                onMouseEnter={() => setActive(i)}
+                onClick={() => go(r.slug)}
+              >
                 <span className={`dot cat-${r.category}`} />
                 <span className="sr-num">{r.num}</span>
                 <span className="sr-name">{r.name}</span>

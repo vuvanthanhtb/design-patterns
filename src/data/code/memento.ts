@@ -2,16 +2,16 @@
 export const memento = {
   javaFile: "MementoDemo.java",
   tsOutput: [
-    "Hiện tại: \"Design Patterns — GoF\" (cursor=21)",
-    "Undo 1:   \"Design Patterns\" (cursor=15)",
-    "Undo 2:   \"Design\" (cursor=6)",
-    "Undo 3:   \"\" (cursor=0)"
+    'Hiện tại: "Design Patterns — GoF" (cursor=21)',
+    'Undo 1:   "Design Patterns" (cursor=15)',
+    'Undo 2:   "Design" (cursor=6)',
+    'Undo 3:   "" (cursor=0)',
   ],
   javaOutput: [
-    "Hiện tại: \"Design Patterns — GoF\" (cursor=21)",
-    "Undo 1:   \"Design Patterns\" (cursor=15)",
-    "Undo 2:   \"Design\" (cursor=6)",
-    "Undo 3:   \"\" (cursor=0)"
+    'Hiện tại: "Design Patterns — GoF" (cursor=21)',
+    'Undo 1:   "Design Patterns" (cursor=15)',
+    'Undo 2:   "Design" (cursor=6)',
+    'Undo 3:   "" (cursor=0)',
   ],
   typescript: `// Memento: bất biến, lưu trạng thái của Editor
 class Snapshot {

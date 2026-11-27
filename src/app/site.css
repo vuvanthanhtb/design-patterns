@@ -11,7 +11,12 @@
   white-space: nowrap;
 }
 mark {
-  background: linear-gradient(transparent 52%, var(--green) 52%, var(--green) 92%, transparent 92%);
+  background: linear-gradient(
+    transparent 52%,
+    var(--green) 52%,
+    var(--green) 92%,
+    transparent 92%
+  );
   color: inherit;
   padding: 0 2px;
 }
@@ -57,7 +62,9 @@ kbd {
   box-shadow: var(--pop-shadow);
   cursor: pointer;
   white-space: nowrap;
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease;
 }
 .btn:hover {
   transform: translate(-0.5px, -0.5px);
@@ -502,7 +509,9 @@ kbd {
   border: 1px solid var(--line);
   border-radius: 10px;
   background-color: var(--sheet);
-  background-image: linear-gradient(30deg, var(--grid) 1px, transparent 1px), linear-gradient(150deg, var(--grid) 1px, transparent 1px);
+  background-image:
+    linear-gradient(30deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(150deg, var(--grid) 1px, transparent 1px);
   background-size: 28px 16px;
   overflow: hidden;
 }
@@ -1112,7 +1121,9 @@ kbd {
 .hero {
   padding: 1.6rem 1.6rem 1.5rem;
   background-color: var(--sheet);
-  background-image: linear-gradient(30deg, var(--grid) 1px, transparent 1px), linear-gradient(150deg, var(--grid) 1px, transparent 1px);
+  background-image:
+    linear-gradient(30deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(150deg, var(--grid) 1px, transparent 1px);
   background-size: 28px 16px;
 }
 .hero h1 {
@@ -1158,7 +1169,10 @@ kbd {
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease;
 }
 .ov-card:hover {
   transform: translate(-1px, -2px);
@@ -1173,7 +1187,9 @@ kbd {
   justify-content: center;
   border-bottom: 1px solid var(--line);
   background-color: var(--sheet);
-  background-image: linear-gradient(30deg, var(--grid) 1px, transparent 1px), linear-gradient(150deg, var(--grid) 1px, transparent 1px);
+  background-image:
+    linear-gradient(30deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(150deg, var(--grid) 1px, transparent 1px);
   background-size: 28px 16px;
 }
 .ov-thumb .uml {
@@ -1332,7 +1348,12 @@ kbd {
 .sk {
   display: block;
   border-radius: 6px;
-  background: linear-gradient(90deg, var(--line-soft), var(--card-2), var(--line-soft));
+  background: linear-gradient(
+    90deg,
+    var(--line-soft),
+    var(--card-2),
+    var(--line-soft)
+  );
   background-size: 200% 100%;
   animation: sk-shimmer 1.4s ease-in-out infinite;
 }

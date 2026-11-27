@@ -2,20 +2,20 @@
 export const state = {
   javaFile: "StateDemo.java",
   tsOutput: [
-    "✏️  \"Design Patterns với TypeScript\" (bản nháp, chỉ tác giả xem)",
+    '✏️  "Design Patterns với TypeScript" (bản nháp, chỉ tác giả xem)',
     "[Draft] gửi kiểm duyệt",
     "[Moderation] chờ admin duyệt…",
     "[Moderation] admin đã duyệt → xuất bản",
-    "🌐 \"Design Patterns với TypeScript\" (công khai)",
-    "[Published] đã xuất bản rồi, không làm gì"
+    '🌐 "Design Patterns với TypeScript" (công khai)',
+    "[Published] đã xuất bản rồi, không làm gì",
   ],
   javaOutput: [
-    "✏️  \"Design Patterns với TypeScript\" (bản nháp, chỉ tác giả xem)",
+    '✏️  "Design Patterns với TypeScript" (bản nháp, chỉ tác giả xem)',
     "[Draft] gửi kiểm duyệt",
     "[Moderation] chờ admin duyệt…",
     "[Moderation] admin đã duyệt → xuất bản",
-    "🌐 \"Design Patterns với TypeScript\" (công khai)",
-    "[Published] đã xuất bản rồi, không làm gì"
+    '🌐 "Design Patterns với TypeScript" (công khai)',
+    "[Published] đã xuất bản rồi, không làm gì",
   ],
   typescript: `type Role = "author" | "admin";
 

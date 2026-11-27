@@ -10,7 +10,7 @@ export const composite = {
     "         📄 math.ts (6 KB)",
     "         📄 date.ts (3 KB)",
     "   📄 package.json (2 KB)",
-    "Tổng dung lượng: 27 KB"
+    "Tổng dung lượng: 27 KB",
   ],
   javaOutput: [
     "📁 project/ (27 KB)",
@@ -21,7 +21,7 @@ export const composite = {
     "         📄 math.ts (6 KB)",
     "         📄 date.ts (3 KB)",
     "   📄 package.json (2 KB)",
-    "Tổng dung lượng: 27 KB"
+    "Tổng dung lượng: 27 KB",
   ],
   typescript: `// Component: interface chung cho lá và nhánh
 interface FileSystemNode {

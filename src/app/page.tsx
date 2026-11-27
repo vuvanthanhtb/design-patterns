@@ -16,8 +16,9 @@ export default function Overview() {
           Học <mark>Design Patterns</mark> bằng sơ đồ động
         </h1>
         <p className="subtitle">
-          Mỗi mẫu là một bài học từng bước: vấn đề → cấu trúc lớp UML → sơ đồ tuần tự chạy từng thông điệp → code TypeScript & Java với
-          output thật → tổng kết.
+          Mỗi mẫu là một bài học từng bước: vấn đề → cấu trúc lớp UML → sơ đồ
+          tuần tự chạy từng thông điệp → code TypeScript & Java với output thật
+          → tổng kết.
         </p>
         <div className="hero-actions">
           <Link href="/patterns/factory-method" className="btn btn-green">
@@ -45,12 +46,19 @@ export default function Overview() {
                 <li key={p.slug}>
                   <Link href={`/patterns/${p.slug}`} className="ov-card card">
                     <div className="ov-thumb">
-                      <UmlDiagram diagram={p.diagram} id={`th-${p.slug}`} title={`Sơ đồ ${p.name}`} legend={false} />
+                      <UmlDiagram
+                        diagram={p.diagram}
+                        id={`th-${p.slug}`}
+                        title={`Sơ đồ ${p.name}`}
+                        legend={false}
+                      />
                     </div>
                     <div className="ov-body">
                       <div className="ov-meta">
                         <span className="num">{number(i)}</span>
-                        <span className="chip chip-violet">{SEQUENCES[p.slug].steps.length + 4} bước</span>
+                        <span className="chip chip-violet">
+                          {SEQUENCES[p.slug].steps.length + 4} bước
+                        </span>
                       </div>
                       <h3>{p.name}</h3>
                       <p className="vi">{p.viName}</p>

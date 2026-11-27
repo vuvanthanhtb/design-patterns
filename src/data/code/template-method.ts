@@ -6,14 +6,14 @@ export const templateMethod = {
     "Kết quả: 3 dòng, tổng doanh thu = 400",
     "  [PDF] trích xuất text từ report.pdf",
     "  [PDF] dọn file tạm sau khi OCR",
-    "Kết quả: 2 dòng, tổng doanh thu = 750"
+    "Kết quả: 2 dòng, tổng doanh thu = 750",
   ],
   javaOutput: [
     "  [CSV] đọc sales.csv",
     "Kết quả: 3 dòng, tổng doanh thu = 400",
     "  [PDF] trích xuất text từ report.pdf",
     "  [PDF] dọn file tạm sau khi OCR",
-    "Kết quả: 2 dòng, tổng doanh thu = 750"
+    "Kết quả: 2 dòng, tổng doanh thu = 750",
   ],
   typescript: `type Row = Record<string, number>;
 

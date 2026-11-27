@@ -5,13 +5,13 @@ export const strategy = {
     "🚗 Hồ Gươm → Nội Bài: 25 phút qua đường vành đai",
     "🚶 Hồ Gươm → Văn Miếu: 1 giờ 10 phút qua công viên",
     "🚌 Hồ Gươm → Cầu Giấy: 40 phút, buýt số 32 rồi metro",
-    "🚲 Hồ Gươm → Hồ Tây: 35 phút"
+    "🚲 Hồ Gươm → Hồ Tây: 35 phút",
   ],
   javaOutput: [
     "🚗 Hồ Gươm → Nội Bài: 25 phút qua đường vành đai",
     "🚶 Hồ Gươm → Văn Miếu: 1 giờ 10 phút qua công viên",
     "🚌 Hồ Gươm → Cầu Giấy: 40 phút, buýt số 32 rồi metro",
-    "🚲 Hồ Gươm → Hồ Tây: 35 phút"
+    "🚲 Hồ Gươm → Hồ Tây: 35 phút",
   ],
   typescript: `// Strategy
 interface RouteStrategy {

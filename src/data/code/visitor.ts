@@ -2,22 +2,22 @@
 export const visitor = {
   javaFile: "VisitorDemo.java",
   tsOutput: [
-    "{\"type\":\"circle\",\"r\":1}",
-    "{\"type\":\"square\",\"side\":3}",
-    "{\"type\":\"circle\",\"r\":2.5}",
+    '{"type":"circle","r":1}',
+    '{"type":"square","side":3}',
+    '{"type":"circle","r":2.5}',
     "Circle: 3.14",
     "Square: 9.00",
     "Circle: 19.63",
-    "Tổng diện tích: 31.78"
+    "Tổng diện tích: 31.78",
   ],
   javaOutput: [
-    "{\"type\":\"circle\",\"r\":1}",
-    "{\"type\":\"square\",\"side\":3}",
-    "{\"type\":\"circle\",\"r\":2.5}",
+    '{"type":"circle","r":1}',
+    '{"type":"square","side":3}',
+    '{"type":"circle","r":2.5}',
     "Circle: 3.14",
     "Square: 9.00",
     "Circle: 19.63",
-    "Tổng diện tích: 31.78"
+    "Tổng diện tích: 31.78",
   ],
   typescript: `// Visitor: một phương thức cho mỗi loại phần tử
 interface Visitor {

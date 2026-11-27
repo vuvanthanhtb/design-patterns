@@ -31,8 +31,11 @@ export function Sidebar() {
   const current = path.startsWith("/patterns/") ? path.split("/")[2] : null;
   const currentCat = NAV_INDEX.find((p) => p.slug === current)?.category;
   const done = useSyncExternalStore(subscribeProgress, snapshot, () => empty);
-  const [toggled, setToggled] = useState<Partial<Record<Category, boolean>>>({});
-  const isOpen = (c: Category) => toggled[c] ?? (currentCat ? c === currentCat : c === "creational");
+  const [toggled, setToggled] = useState<Partial<Record<Category, boolean>>>(
+    {},
+  );
+  const isOpen = (c: Category) =>
+    toggled[c] ?? (currentCat ? c === currentCat : c === "creational");
 
   return (
     <aside className="sidebar" aria-label="Khoá học">
@@ -48,13 +51,19 @@ export function Sidebar() {
           const open = isOpen(cat);
           return (
             <li key={cat}>
-              <button type="button" className="tree-group" aria-expanded={open} onClick={() => setToggled((t) => ({ ...t, [cat]: !open }))}>
+              <button
+                type="button"
+                className="tree-group"
+                aria-expanded={open}
+                onClick={() => setToggled((t) => ({ ...t, [cat]: !open }))}
+              >
                 <span className={`chev${open ? " open" : ""}`}>
                   <IconChevron size={12} />
                 </span>
                 <Folder color={COLORS[cat]} />
                 <span className="tree-title">
-                  {String(ci + 1).padStart(2, "0")}. {cap(CATEGORY_INFO[cat].vi.replace("Nhóm ", ""))}
+                  {String(ci + 1).padStart(2, "0")}.{" "}
+                  {cap(CATEGORY_INFO[cat].vi.replace("Nhóm ", ""))}
                 </span>
                 <span className="muted">
                   {count}/{items.length}
@@ -67,8 +76,18 @@ export function Sidebar() {
                     const ok = done.includes(p.slug);
                     return (
                       <li key={p.slug}>
-                        <Link href={`/patterns/${p.slug}`} className={`tree-item${on ? " on" : ""}`} aria-current={on ? "page" : undefined}>
-                          <span className={`file${ok ? " ok" : ""}`}>{ok ? <IconCheck size={12} /> : <IconFile size={12} />}</span>
+                        <Link
+                          href={`/patterns/${p.slug}`}
+                          className={`tree-item${on ? " on" : ""}`}
+                          aria-current={on ? "page" : undefined}
+                        >
+                          <span className={`file${ok ? " ok" : ""}`}>
+                            {ok ? (
+                              <IconCheck size={12} />
+                            ) : (
+                              <IconFile size={12} />
+                            )}
+                          </span>
                           {p.name}
                         </Link>
                       </li>

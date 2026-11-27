@@ -30,8 +30,18 @@ export function measureBox(c: UmlClass): Box {
     ...(c.attrs ?? []).map((s) => s.length),
     ...(c.ops ?? []).map((s) => s.length),
   );
-  const auto = up4(Math.max(c.name.length * 12 * 0.6 + 40, longest * 9 * 0.62 + 32, 128));
-  return { x: c.x, y: c.y, w: c.w ?? auto, h: nameH + attrsH + opsH, nameH, attrsH, opsH };
+  const auto = up4(
+    Math.max(c.name.length * 12 * 0.6 + 40, longest * 9 * 0.62 + 32, 128),
+  );
+  return {
+    x: c.x,
+    y: c.y,
+    w: c.w ?? auto,
+    h: nameH + attrsH + opsH,
+    nameH,
+    attrsH,
+    opsH,
+  };
 }
 
 type Pt = [number, number];
@@ -61,7 +71,8 @@ const vertical = (s: Side) => s === "top" || s === "bottom";
 export function route(r: UmlRelation, boxes: Record<string, Box>): Pt[] {
   const a = boxes[r.from];
   const b = boxes[r.to];
-  if (!a || !b) throw new Error(`Unknown class in relation ${r.from} → ${r.to}`);
+  if (!a || !b)
+    throw new Error(`Unknown class in relation ${r.from} → ${r.to}`);
   const [sa, sb] = autoSides(a, b);
   const fs = r.fromSide ?? sa;
   const ts = r.toSide ?? sb;
@@ -106,7 +117,11 @@ export function roundedPath(pts: Pt[], r = 8): string {
 }
 
 /** Midpoint of the longest segment — where an arrow label sits. */
-export function labelPoint(pts: Pt[]): { x: number; y: number; horizontal: boolean } {
+export function labelPoint(pts: Pt[]): {
+  x: number;
+  y: number;
+  horizontal: boolean;
+} {
   let best = 0;
   let bi = 0;
   for (let i = 0; i < pts.length - 1; i++) {
@@ -123,7 +138,10 @@ export function labelPoint(pts: Pt[]): { x: number; y: number; horizontal: boole
 
 /** Point `d` px from an endpoint, along the first/last segment. */
 export function nearEnd(pts: Pt[], end: "start" | "end", d: number): Pt {
-  const [a, b] = end === "start" ? [pts[0], pts[1]] : [pts[pts.length - 1], pts[pts.length - 2]];
+  const [a, b] =
+    end === "start"
+      ? [pts[0], pts[1]]
+      : [pts[pts.length - 1], pts[pts.length - 2]];
   const l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
   return [a[0] + ((b[0] - a[0]) / l) * d, a[1] + ((b[1] - a[1]) / l) * d];
 }
@@ -131,8 +149,10 @@ export function nearEnd(pts: Pt[], end: "start" | "end", d: number): Pt {
 export function diagramHeight(d: Diagram, boxes: Record<string, Box>) {
   let max = 0;
   for (const b of Object.values(boxes)) max = Math.max(max, b.y + b.h);
-  for (const n of d.notes ?? []) max = Math.max(max, n.y + n.text.length * 16 + 16);
-  for (const r of d.relations) for (const p of r.points ?? []) max = Math.max(max, p[1]);
+  for (const n of d.notes ?? [])
+    max = Math.max(max, n.y + n.text.length * 16 + 16);
+  for (const r of d.relations)
+    for (const p of r.points ?? []) max = Math.max(max, p[1]);
   return up4(max + 40);
 }
 

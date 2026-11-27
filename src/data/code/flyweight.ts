@@ -6,14 +6,14 @@ export const flyweight = {
     "Sồi (xanh lá) tại (1, 0)",
     "Phong (đỏ) tại (2, 0)",
     "Số cây: 100.000",
-    "Số TreeType thực sự trong bộ nhớ: 3"
+    "Số TreeType thực sự trong bộ nhớ: 3",
   ],
   javaOutput: [
     "Thông (xanh đậm) tại (0, 0)",
     "Sồi (xanh lá) tại (1, 0)",
     "Phong (đỏ) tại (2, 0)",
     "Số cây: 100.000",
-    "Số TreeType thực sự trong bộ nhớ: 3"
+    "Số TreeType thực sự trong bộ nhớ: 3",
   ],
   typescript: `// Flyweight: trạng thái nội tại (intrinsic), bất biến và dùng chung
 class TreeType {

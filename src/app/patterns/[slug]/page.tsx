@@ -5,7 +5,11 @@ import { LessonPlayer } from "@/components/LessonPlayer";
 import { CATEGORY_INFO } from "@/data/meta";
 import { getPattern, PATTERNS } from "@/data/patterns";
 
-const CAT_NUM = { creational: "01", structural: "02", behavioral: "03" } as const;
+const CAT_NUM = {
+  creational: "01",
+  structural: "02",
+  behavioral: "03",
+} as const;
 
 type Params = PageProps<"/patterns/[slug]">["params"];
 
@@ -13,11 +17,16 @@ export function generateStaticParams() {
   return PATTERNS.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/patterns/[slug]">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/patterns/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const found = getPattern(slug);
   if (!found) return {};
-  return { title: `${found.pattern.name} — ${found.pattern.viName}`, description: found.pattern.intent };
+  return {
+    title: `${found.pattern.name} — ${found.pattern.viName}`,
+    description: found.pattern.intent,
+  };
 }
 
 /**
@@ -48,9 +57,14 @@ async function Lesson({ params }: { params: Params }) {
       example={example}
       index={index}
       total={PATTERNS.length}
-      categoryLabel={CATEGORY_INFO[pattern.category].vi.replace("Nhóm ", "").replace(/^./, (c) => c.toUpperCase())}
+      categoryLabel={CATEGORY_INFO[pattern.category].vi
+        .replace("Nhóm ", "")
+        .replace(/^./, (c) => c.toUpperCase())}
       categoryNum={CAT_NUM[pattern.category]}
-      lessonInCategory={{ n: siblings.findIndex((x) => x.slug === slug) + 1, of: siblings.length }}
+      lessonInCategory={{
+        n: siblings.findIndex((x) => x.slug === slug) + 1,
+        of: siblings.length,
+      }}
       prev={prev && { slug: prev.slug, name: prev.name }}
       next={next && { slug: next.slug, name: next.name }}
     />

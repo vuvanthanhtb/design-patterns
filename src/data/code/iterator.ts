@@ -7,7 +7,7 @@ export const iterator = {
     "▶ See tình — Hoàng Thuỳ Linh",
     "▶ Waiting for you — MONO",
     "Bỏ qua 1 bài: Nơi này có anh, See tình",
-    "for…of: Sơn Tùng | Hoài Lâm | Hoàng Thuỳ Linh | MONO"
+    "for…of: Sơn Tùng | Hoài Lâm | Hoàng Thuỳ Linh | MONO",
   ],
   javaOutput: [
     "▶ Nơi này có anh — Sơn Tùng",
@@ -15,7 +15,7 @@ export const iterator = {
     "▶ See tình — Hoàng Thuỳ Linh",
     "▶ Waiting for you — MONO",
     "Bỏ qua 1 bài: Nơi này có anh, See tình",
-    "for-each: Sơn Tùng | Hoài Lâm | Hoàng Thuỳ Linh | MONO"
+    "for-each: Sơn Tùng | Hoài Lâm | Hoàng Thuỳ Linh | MONO",
   ],
   typescript: `interface Song {
   title: string;

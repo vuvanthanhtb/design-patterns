@@ -3,23 +3,23 @@ export const mediator = {
   javaFile: "MediatorDemo.java",
   tsOutput: [
     "  (Đăng nhập đang bị vô hiệu hoá)",
-    "→ mediator nhận \"input\" từ Mật khẩu",
+    '→ mediator nhận "input" từ Mật khẩu',
     "  (Đăng nhập đang bị vô hiệu hoá)",
-    "→ mediator nhận \"input\" từ Mật khẩu",
-    "→ mediator nhận \"click\" từ Đăng nhập",
+    '→ mediator nhận "input" từ Mật khẩu',
+    '→ mediator nhận "click" từ Đăng nhập',
     "  ✅ Gửi form (khách: false)",
-    "→ mediator nhận \"toggle\" từ Đăng nhập khách",
-    "  Ô mật khẩu hiển thị: false"
+    '→ mediator nhận "toggle" từ Đăng nhập khách',
+    "  Ô mật khẩu hiển thị: false",
   ],
   javaOutput: [
     "  (Đăng nhập đang bị vô hiệu hoá)",
-    "→ mediator nhận \"input\" từ Mật khẩu",
+    '→ mediator nhận "input" từ Mật khẩu',
     "  (Đăng nhập đang bị vô hiệu hoá)",
-    "→ mediator nhận \"input\" từ Mật khẩu",
-    "→ mediator nhận \"click\" từ Đăng nhập",
+    '→ mediator nhận "input" từ Mật khẩu',
+    '→ mediator nhận "click" từ Đăng nhập',
     "  ✅ Gửi form (khách: false)",
-    "→ mediator nhận \"toggle\" từ Đăng nhập khách",
-    "  Ô mật khẩu hiển thị: false"
+    '→ mediator nhận "toggle" từ Đăng nhập khách',
+    "  Ô mật khẩu hiển thị: false",
   ],
   typescript: `// Mediator
 interface Mediator {

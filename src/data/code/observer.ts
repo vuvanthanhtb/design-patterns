@@ -2,18 +2,18 @@
 export const observer = {
   javaFile: "ObserverDemo.java",
   tsOutput: [
-    "📰 Phát tin: \"Giá vàng tăng mạnh\"",
+    '📰 Phát tin: "Giá vàng tăng mạnh"',
     "   ✉️  gửi tới lan@example.vn: Giá vàng tăng mạnh",
     "   🔔 push tới thiết bị iphone-42: Giá vàng tăng mạnh",
-    "📰 Phát tin: \"Thời tiết: mưa lớn ở Hà Nội\"",
-    "   🔔 push tới thiết bị iphone-42: Thời tiết: mưa lớn ở Hà Nội"
+    '📰 Phát tin: "Thời tiết: mưa lớn ở Hà Nội"',
+    "   🔔 push tới thiết bị iphone-42: Thời tiết: mưa lớn ở Hà Nội",
   ],
   javaOutput: [
-    "📰 Phát tin: \"Giá vàng tăng mạnh\"",
+    '📰 Phát tin: "Giá vàng tăng mạnh"',
     "   ✉️  gửi tới lan@example.vn: Giá vàng tăng mạnh",
     "   🔔 push tới thiết bị iphone-42: Giá vàng tăng mạnh",
-    "📰 Phát tin: \"Thời tiết: mưa lớn ở Hà Nội\"",
-    "   🔔 push tới thiết bị iphone-42: Thời tiết: mưa lớn ở Hà Nội"
+    '📰 Phát tin: "Thời tiết: mưa lớn ở Hà Nội"',
+    "   🔔 push tới thiết bị iphone-42: Thời tiết: mưa lớn ở Hà Nội",
   ],
   typescript: `// Subscriber
 interface Subscriber {

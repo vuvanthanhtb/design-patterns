@@ -12,7 +12,12 @@ export function buildLessonSteps(_p: Pattern, seq: Sequence): LessonStep[] {
   return [
     { kind: "problem", label: "Vấn đề", badge: "VẤN ĐỀ" },
     { kind: "structure", label: "Cấu trúc", badge: "CẤU TRÚC" },
-    ...seq.steps.map((s, index) => ({ kind: "flow" as const, label: s.title, badge: "LUỒNG CHẠY" as const, index })),
+    ...seq.steps.map((s, index) => ({
+      kind: "flow" as const,
+      label: s.title,
+      badge: "LUỒNG CHẠY" as const,
+      index,
+    })),
     { kind: "code", label: "Code", badge: "CODE" },
     { kind: "recap", label: "Tổng kết", badge: "TỔNG KẾT" },
   ];

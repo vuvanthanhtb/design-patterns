@@ -32,7 +32,8 @@ export function layoutSequence(seq: Sequence) {
   const margin = n <= 2 ? 240 : n === 3 ? 150 : 96;
   const xs: Record<string, number> = {};
   seq.participants.forEach((p, i) => {
-    xs[p.id] = n === 1 ? W / 2 : Math.round(margin + (i * (W - 2 * margin)) / (n - 1));
+    xs[p.id] =
+      n === 1 ? W / 2 : Math.round(margin + (i * (W - 2 * margin)) / (n - 1));
   });
   const spacing = n > 1 ? (W - 2 * margin) / (n - 1) : W;
 
@@ -54,7 +55,13 @@ export function layoutSequence(seq: Sequence) {
   return { xs, spacing, placed, stepY, height: up4(y + 8) };
 }
 
-export function SequenceDiagram({ seq, id, title, current, playKey = 0 }: Props) {
+export function SequenceDiagram({
+  seq,
+  id,
+  title,
+  current,
+  playKey = 0,
+}: Props) {
   const { xs, spacing, placed, stepY, height } = layoutSequence(seq);
   const m = (s: string) => `${id}-${s}`;
   const activeIds = new Set<string>();
@@ -65,22 +72,66 @@ export function SequenceDiagram({ seq, id, title, current, playKey = 0 }: Props)
     }
   }
   const stateOf = (step: number) =>
-    current === null ? "done" : step < current ? "done" : step === current ? "active" : "future";
+    current === null
+      ? "done"
+      : step < current
+        ? "done"
+        : step === current
+          ? "active"
+          : "future";
 
   return (
-    <svg className="seq" viewBox={`0 0 ${W} ${height}`} xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title}>
+    <svg
+      className="seq"
+      viewBox={`0 0 ${W} ${height}`}
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label={title}
+    >
       <title>{title}</title>
       <defs>
-        <marker id={m("filled")} markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <marker
+          id={m("filled")}
+          markerWidth="9"
+          markerHeight="8"
+          refX="8"
+          refY="4"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+        >
           <path d="M0,0 L9,4 L0,8 Z" className="mk-filled" />
         </marker>
-        <marker id={m("filled-ret")} markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <marker
+          id={m("filled-ret")}
+          markerWidth="9"
+          markerHeight="8"
+          refX="8"
+          refY="4"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+        >
           <path d="M0,0 L9,4 L0,8 Z" className="mk-filled ret" />
         </marker>
-        <marker id={m("open")} markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <marker
+          id={m("open")}
+          markerWidth="10"
+          markerHeight="8"
+          refX="9"
+          refY="4"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+        >
           <path d="M0,0 L9,4 L0,8" className="mk-open" />
         </marker>
-        <marker id={m("accent")} markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <marker
+          id={m("accent")}
+          markerWidth="9"
+          markerHeight="8"
+          refX="8"
+          refY="4"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+        >
           <path d="M0,0 L9,4 L0,8 Z" className="mk-accent" />
         </marker>
       </defs>
@@ -88,7 +139,9 @@ export function SequenceDiagram({ seq, id, title, current, playKey = 0 }: Props)
       {/* Combined fragments (loop / opt) — vẽ trước để nằm dưới thông điệp */}
       {(seq.fragments ?? []).map((f, i) => {
         const ids = new Set<string>();
-        for (let s = f.fromStep; s <= f.toStep; s++) for (const msg of seq.steps[s].messages) ids.add(msg.from).add(msg.to);
+        for (let s = f.fromStep; s <= f.toStep; s++)
+          for (const msg of seq.steps[s].messages)
+            ids.add(msg.from).add(msg.to);
         const px = [...ids].map((pid) => xs[pid]);
         const x1 = Math.max(32, Math.min(...px) - 56);
         const x2 = Math.min(W - 16, Math.max(...px) + 96);
@@ -96,8 +149,18 @@ export function SequenceDiagram({ seq, id, title, current, playKey = 0 }: Props)
         const bottom = stepY[f.toStep].bottom - 4;
         return (
           <g key={i}>
-            <rect x={x1} y={top} width={x2 - x1} height={bottom - top} rx={4} className="frag-box" />
-            <path d={`M ${x1},${top + 16} V ${top + 4} Q ${x1},${top} ${x1 + 4},${top} H ${x1 + 44} V ${top + 10} L ${x1 + 38},${top + 16} Z`} className="frag-tab" />
+            <rect
+              x={x1}
+              y={top}
+              width={x2 - x1}
+              height={bottom - top}
+              rx={4}
+              className="frag-box"
+            />
+            <path
+              d={`M ${x1},${top + 16} V ${top + 4} Q ${x1},${top} ${x1 + 4},${top} H ${x1 + 44} V ${top + 10} L ${x1 + 38},${top + 16} Z`}
+              className="frag-tab"
+            />
             <text x={x1 + 8} y={top + 11} className="frag-kind">
               {f.kind.toUpperCase()}
             </text>
@@ -111,12 +174,39 @@ export function SequenceDiagram({ seq, id, title, current, playKey = 0 }: Props)
       {/* Participants + lifelines */}
       {seq.participants.map((p) => {
         const x = xs[p.id];
-        const w = Math.min(up4(p.label.length * 7.3 + 28), up4(spacing - 12), 240);
+        const w = Math.min(
+          up4(p.label.length * 7.3 + 28),
+          up4(spacing - 12),
+          240,
+        );
         return (
-          <g key={p.id} className={`p${p.focal ? " focal" : ""}${activeIds.has(p.id) ? " on" : ""}`}>
-            <line x1={x} x2={x} y1={HEAD_Y + HEAD_H} y2={height - 8} className="lifeline" />
-            <rect x={x - w / 2 + 1.5} y={HEAD_Y + 2.5} width={w} height={HEAD_H} rx={8} className="p-shadow" />
-            <rect x={x - w / 2} y={HEAD_Y} width={w} height={HEAD_H} rx={8} className="p-box" />
+          <g
+            key={p.id}
+            className={`p${p.focal ? " focal" : ""}${activeIds.has(p.id) ? " on" : ""}`}
+          >
+            <line
+              x1={x}
+              x2={x}
+              y1={HEAD_Y + HEAD_H}
+              y2={height - 8}
+              className="lifeline"
+            />
+            <rect
+              x={x - w / 2 + 1.5}
+              y={HEAD_Y + 2.5}
+              width={w}
+              height={HEAD_H}
+              rx={8}
+              className="p-shadow"
+            />
+            <rect
+              x={x - w / 2}
+              y={HEAD_Y}
+              width={w}
+              height={HEAD_H}
+              rx={8}
+              className="p-box"
+            />
             <text x={x} y={HEAD_Y + 22} textAnchor="middle" className="p-label">
               {p.label}
             </text>
@@ -146,7 +236,14 @@ export function SequenceDiagram({ seq, id, title, current, playKey = 0 }: Props)
             .filter((p) => p.step === current)
             .map((p, i) =>
               p.x1 === p.x2 ? (
-                <circle key={i} cx={p.x1 + (p.x1 + 200 > W ? -20 : 20)} cy={p.y + 10} r={3} className="self-pulse" style={{ animationDelay: `${p.order * 900}ms` }} />
+                <circle
+                  key={i}
+                  cx={p.x1 + (p.x1 + 200 > W ? -20 : 20)}
+                  cy={p.y + 10}
+                  r={3}
+                  className="self-pulse"
+                  style={{ animationDelay: `${p.order * 900}ms` }}
+                />
               ) : (
                 <circle
                   key={i}
@@ -154,7 +251,10 @@ export function SequenceDiagram({ seq, id, title, current, playKey = 0 }: Props)
                   cy={p.y}
                   r={4.5}
                   className="token"
-                  style={{ ["--dx" as string]: `${p.x2 - p.x1 - Math.sign(p.x2 - p.x1) * 8}px`, animationDelay: `${p.order * 900}ms` }}
+                  style={{
+                    ["--dx" as string]: `${p.x2 - p.x1 - Math.sign(p.x2 - p.x1) * 8}px`,
+                    animationDelay: `${p.order * 900}ms`,
+                  }}
                 />
               ),
             )}
@@ -164,7 +264,15 @@ export function SequenceDiagram({ seq, id, title, current, playKey = 0 }: Props)
   );
 }
 
-function Message({ p, state, m }: { p: Placed; state: string; m: (s: string) => string }) {
+function Message({
+  p,
+  state,
+  m,
+}: {
+  p: Placed;
+  state: string;
+  m: (s: string) => string;
+}) {
   const { m: msg, y, x1, x2 } = p;
   const active = state === "active";
   const marker = active
@@ -184,8 +292,19 @@ function Message({ p, state, m }: { p: Placed; state: string; m: (s: string) => 
     const lx = flip ? x1 - 42 - labelW : x1 + 42;
     return (
       <g className={cls}>
-        <path d={`M ${x1},${y} H ${x1 + d * 36} V ${y + 22} H ${x1 + d * 4}`} className="msg-line" markerEnd={`url(#${marker})`} />
-        <rect x={lx} y={y + 3} width={labelW} height={16} rx={3} className="msg-mask" />
+        <path
+          d={`M ${x1},${y} H ${x1 + d * 36} V ${y + 22} H ${x1 + d * 4}`}
+          className="msg-line"
+          markerEnd={`url(#${marker})`}
+        />
+        <rect
+          x={lx}
+          y={y + 3}
+          width={labelW}
+          height={16}
+          rx={3}
+          className="msg-mask"
+        />
         <text x={lx + 6} y={y + 15} className="msg-label">
           {msg.label}
         </text>
@@ -196,8 +315,19 @@ function Message({ p, state, m }: { p: Placed; state: string; m: (s: string) => 
   const mid = (x1 + x2) / 2;
   return (
     <g className={cls}>
-      <path d={`M ${x1 + dir * 2},${y} H ${x2 - dir * 2}`} className="msg-line" markerEnd={`url(#${marker})`} />
-      <rect x={mid - labelW / 2} y={y - 19} width={labelW} height={16} rx={3} className="msg-mask" />
+      <path
+        d={`M ${x1 + dir * 2},${y} H ${x2 - dir * 2}`}
+        className="msg-line"
+        markerEnd={`url(#${marker})`}
+      />
+      <rect
+        x={mid - labelW / 2}
+        y={y - 19}
+        width={labelW}
+        height={16}
+        rx={3}
+        className="msg-mask"
+      />
       <text x={mid} y={y - 8} textAnchor="middle" className="msg-label">
         {msg.label}
       </text>

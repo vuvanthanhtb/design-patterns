@@ -7,7 +7,7 @@ export const proxy = {
     "  [cache hit]  cat",
     "  [cache hit]  cat",
     "  [cache hit]  dog",
-    "Số lần gọi YouTube thật: 2/5"
+    "Số lần gọi YouTube thật: 2/5",
   ],
   javaOutput: [
     "  [cache miss] cat → gọi YouTube",
@@ -15,7 +15,7 @@ export const proxy = {
     "  [cache hit]  cat",
     "  [cache hit]  cat",
     "  [cache hit]  dog",
-    "Số lần gọi YouTube thật: 2/5"
+    "Số lần gọi YouTube thật: 2/5",
   ],
   typescript: `// Subject
 interface VideoService {

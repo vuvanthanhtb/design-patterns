@@ -2,16 +2,16 @@
 export const command = {
   javaFile: "CommandDemo.java",
   tsOutput: [
-    "\"Xin chào, thế giới!\"",
-    "\"Xin chào, thế giới\"",
-    "\"Xin chào, thế giới!\"",
-    "\"Xin chào\""
+    '"Xin chào, thế giới!"',
+    '"Xin chào, thế giới"',
+    '"Xin chào, thế giới!"',
+    '"Xin chào"',
   ],
   javaOutput: [
-    "\"Xin chào, thế giới!\"",
-    "\"Xin chào, thế giới\"",
-    "\"Xin chào, thế giới!\"",
-    "\"Xin chào\""
+    '"Xin chào, thế giới!"',
+    '"Xin chào, thế giới"',
+    '"Xin chào, thế giới!"',
+    '"Xin chào"',
   ],
   typescript: `// Receiver: chứa logic nghiệp vụ thật
 class Editor {

@@ -4,7 +4,11 @@ import type { PatternMeta } from "./meta";
 import { structural } from "./structural";
 
 /** Toàn bộ dữ liệu là hằng số trong mã nguồn — không gọi API. */
-export const PATTERNS: PatternMeta[] = [...creational, ...structural, ...behavioral];
+export const PATTERNS: PatternMeta[] = [
+  ...creational,
+  ...structural,
+  ...behavioral,
+];
 
 export const number = (i: number) => String(i + 1).padStart(2, "0");
 

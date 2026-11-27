@@ -6,7 +6,9 @@ const KEYWORDS = new Set(
   ),
 );
 const BUILTINS = new Set(
-  "string number boolean unknown any never object int long double char byte short Record Map Set Array Math JSON Object Number String Symbol Date Error console System List Deque HashMap ArrayList ArrayDeque Integer Override FunctionalInterface".split(" "),
+  "string number boolean unknown any never object int long double char byte short Record Map Set Array Math JSON Object Number String Symbol Date Error console System List Deque HashMap ArrayList ArrayDeque Integer Override FunctionalInterface".split(
+    " ",
+  ),
 );
 
 const TOKEN =
@@ -30,12 +32,21 @@ function tokenize(src: string): Tok[] {
       else if (/^[A-Z]/.test(text)) out.push({ t: text, c: "tk-type" });
       else if (after) out.push({ t: text, c: "tk-fn" });
       else out.push({ t: text });
-    } else out.push({ t: text, c: /^\s+$/.test(text) ? undefined : "tk-punct" });
+    } else
+      out.push({ t: text, c: /^\s+$/.test(text) ? undefined : "tk-punct" });
   }
   return out;
 }
 
-export function Code({ code, filename, tabs }: { code: string; filename: string; tabs?: React.ReactNode }) {
+export function Code({
+  code,
+  filename,
+  tabs,
+}: {
+  code: string;
+  filename: string;
+  tabs?: React.ReactNode;
+}) {
   const lines = code.split("\n");
   return (
     <div className="code">
@@ -69,7 +80,13 @@ export function Code({ code, filename, tabs }: { code: string; filename: string;
   );
 }
 
-export function Terminal({ lines, command }: { lines: string[]; command: string }) {
+export function Terminal({
+  lines,
+  command,
+}: {
+  lines: string[];
+  command: string;
+}) {
   return (
     <div className="terminal">
       <div className="terminal-cmd">

@@ -1,13 +1,10 @@
 // Dữ liệu cứng: mã nguồn ví dụ abstract-factory (TypeScript + Java) và output đã chạy thật.
 export const abstractFactory = {
   javaFile: "AbstractFactoryDemo.java",
-  tsOutput: [
-    "[ OK ] (Windows)  [x] (Windows)",
-    "( OK ) (macOS)  (✓) (macOS)"
-  ],
+  tsOutput: ["[ OK ] (Windows)  [x] (Windows)", "( OK ) (macOS)  (✓) (macOS)"],
   javaOutput: [
     "[ OK ] (Windows)  [x] (Windows)",
-    "( OK ) (macOS)  (✓) (macOS)"
+    "( OK ) (macOS)  (✓) (macOS)",
   ],
   typescript: `// AbstractProduct
 interface Button {

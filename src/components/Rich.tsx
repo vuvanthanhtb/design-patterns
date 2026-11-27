@@ -4,7 +4,11 @@ export function Rich({ text }: { text: string }) {
   return (
     <>
       {parts.map((p, i) =>
-        p.startsWith("`") && p.endsWith("`") ? <code key={i}>{p.slice(1, -1)}</code> : p,
+        p.startsWith("`") && p.endsWith("`") ? (
+          <code key={i}>{p.slice(1, -1)}</code>
+        ) : (
+          p
+        ),
       )}
     </>
   );

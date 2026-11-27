@@ -4,12 +4,12 @@ export const builder = {
   tsOutput: [
     "Nhà cơ bản: tường gỗ + mái ngói",
     "Nhà cao cấp: tường gỗ + mái ngói + hồ bơi",
-    "Tuỳ chỉnh: tường gỗ + hồ bơi"
+    "Tuỳ chỉnh: tường gỗ + hồ bơi",
   ],
   javaOutput: [
     "Nhà cơ bản: tường gỗ + mái ngói",
     "Nhà cao cấp: tường gỗ + mái ngói + hồ bơi",
-    "Tuỳ chỉnh: tường gỗ + hồ bơi"
+    "Tuỳ chỉnh: tường gỗ + hồ bơi",
   ],
   typescript: `// Product
 class House {

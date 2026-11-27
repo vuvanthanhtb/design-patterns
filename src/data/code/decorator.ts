@@ -6,14 +6,14 @@ export const decorator = {
     "📱 SMS: Server CPU 95%",
     "💬 Slack: Server CPU 95%",
     "---",
-    "📧 Email: DEPLOY XONG"
+    "📧 Email: DEPLOY XONG",
   ],
   javaOutput: [
     "📧 Email: Server CPU 95%",
     "📱 SMS: Server CPU 95%",
     "💬 Slack: Server CPU 95%",
     "---",
-    "📧 Email: DEPLOY XONG"
+    "📧 Email: DEPLOY XONG",
   ],
   typescript: `// Component
 interface Notifier {

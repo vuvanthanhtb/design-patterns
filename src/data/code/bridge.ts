@@ -6,14 +6,14 @@ export const bridge = {
     "TV: âm lượng 40",
     "Radio: BẬT",
     "Radio: âm lượng 20",
-    "Radio: đã tắt tiếng"
+    "Radio: đã tắt tiếng",
   ],
   javaOutput: [
     "TV: BẬT",
     "TV: âm lượng 40",
     "Radio: BẬT",
     "Radio: âm lượng 20",
-    "Radio: đã tắt tiếng"
+    "Radio: đã tắt tiếng",
   ],
   typescript: `// Implementation: interface chung cho mọi thiết bị
 interface Device {

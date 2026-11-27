@@ -3,11 +3,11 @@ export const adapter = {
   javaFile: "AdapterDemo.java",
   tsOutput: [
     "Thu tiền mặt 250.000₫",
-    "Đã thanh toán 250.000₫ qua Stripe (ch_1000, 1000 cents)"
+    "Đã thanh toán 250.000₫ qua Stripe (ch_1000, 1000 cents)",
   ],
   javaOutput: [
     "Thu tiền mặt 250.000₫",
-    "Đã thanh toán 250.000₫ qua Stripe (ch_1000, 1000 cents)"
+    "Đã thanh toán 250.000₫ qua Stripe (ch_1000, 1000 cents)",
   ],
   typescript: `// Target: interface mà hệ thống của bạn đang dùng
 interface PaymentProcessor {

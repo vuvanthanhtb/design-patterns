@@ -1,6 +1,6 @@
 # Design Patterns — 23 mẫu GoF
 
-Khoá học tương tác bằng Next.js 16 + TypeScript. Giao diện theo phong cách *lesson player*
+Khoá học tương tác bằng Next.js 16 + TypeScript. Giao diện theo phong cách _lesson player_
 (lấy cảm hứng từ designed-to-scale.vercel.app): cây khoá học bên trái, sân khấu sơ đồ ở giữa,
 panel kể chuyện từng bước bên phải, stepper "Trong bài này" ở dưới.
 

@@ -3,11 +3,11 @@ export const factoryMethod = {
   javaFile: "FactoryMethodDemo.java",
   tsOutput: [
     "Đơn #1024: giao bằng xe tải trên đường bộ",
-    "Đơn #1024: giao bằng tàu biển trong container"
+    "Đơn #1024: giao bằng tàu biển trong container",
   ],
   javaOutput: [
     "Đơn #1024: giao bằng xe tải trên đường bộ",
-    "Đơn #1024: giao bằng tàu biển trong container"
+    "Đơn #1024: giao bằng tàu biển trong container",
   ],
   typescript: `// Product: interface chung cho mọi phương tiện
 interface Transport {
