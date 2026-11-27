@@ -1,0 +1,479 @@
+/* Tokens theo thiết kế "designed-to-scale": giấy be ấm, mực nâu đen,
+   viền đậm + bóng cứng lệch, pastel xanh / tím / cam, JetBrains Mono. */
+:root {
+  --paper: #f4ebe0;
+  --paper-2: #f7efe4;
+  --sheet: #f9f2e8;
+  --card: #f8f0e6;
+  --card-2: #f6eee3;
+  --line: #ddd3c5;
+  --line-soft: #e6ddd0;
+  --line-strong: #c6bbac;
+  --edge: #46413b;
+  --ink: #1d1b18;
+  --ink-2: #34302b;
+  --muted: #6f6961;
+  --muted-2: #8b847a;
+  --green: #cfe3b2;
+  --green-2: #b2d491;
+  --green-3: #7fc278;
+  --green-ink: #24521c;
+  --violet: #e7ddf5;
+  --violet-line: #d5c8e2;
+  --violet-ink: #5a43a6;
+  --orange: #fcdcbd;
+  --orange-ink: #a5650c;
+  --mint: #dff0de;
+  --rose: #f8d5cf;
+  --rose-ink: #8f2a22;
+  --rust: #d0683a;
+  --rust-tint: rgba(208, 104, 58, 0.12);
+  --node: #fbf7f1;
+  --grid: rgba(80, 60, 35, 0.07);
+  --drop: var(--ink);
+  --pop-shadow: 1.5px 2.5px 0 var(--drop);
+  --card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 1px 0 rgba(80, 60, 35, 0.08), 0 10px 22px -18px rgba(60, 40, 20, 0.45);
+  --radius: 12px;
+  --font: var(--font-jetbrains), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Màu theo nhóm mẫu */
+  --cat-creational: #5fae57;
+  --cat-structural: #7c63d0;
+  --cat-behavioral: #e8834d;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --paper: #191714;
+  --paper-2: #1e1b18;
+  --sheet: #221f1b;
+  --card: #24211d;
+  --card-2: #2a2621;
+  --line: #3a352f;
+  --line-soft: #312d28;
+  --line-strong: #4a443c;
+  --edge: #b9b0a3;
+  --ink: #f1e8db;
+  --ink-2: #ddd3c5;
+  --muted: #a69d91;
+  --muted-2: #8f877c;
+  --green: #36502a;
+  --green-2: #4d7038;
+  --green-3: #7fc278;
+  --green-ink: #cde6ba;
+  --violet: #352d47;
+  --violet-line: #4b3f63;
+  --violet-ink: #d5c8e2;
+  --orange: #4a3220;
+  --orange-ink: #f6cfa0;
+  --mint: #22361f;
+  --rose: #4a2622;
+  --rose-ink: #f6cfc7;
+  --rust: #e8834d;
+  --rust-tint: rgba(232, 131, 77, 0.14);
+  --node: #2a2622;
+  --grid: rgba(241, 232, 219, 0.05);
+  --drop: #000;
+  --card-shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 10px 22px -18px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  font-family: var(--font);
+  font-size: 13px;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--green);
+}
+
+:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 2px;
+}
+
+/* ───────────── UML class diagram ───────────── */
+.uml {
+  width: 100%;
+  height: auto;
+  display: block;
+  font-family: var(--font);
+}
+.uml .shadow {
+  fill: var(--drop);
+}
+.uml .box {
+  fill: var(--node);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+}
+.uml .focal .box {
+  fill: #fdeedd;
+  stroke: var(--rust);
+}
+:root[data-theme="dark"] .uml .focal .box {
+  fill: #3a2a1f;
+}
+.uml .focal .band {
+  fill: var(--orange);
+}
+.uml .focal .divider {
+  stroke: var(--rust);
+  stroke-opacity: 0.45;
+}
+.uml .cls-client .box {
+  fill: var(--card-2);
+  stroke: var(--muted);
+  stroke-dasharray: 4 3;
+}
+.uml .cls-client .shadow {
+  display: none;
+}
+.uml .divider {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+.uml .stereo {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  fill: var(--muted);
+}
+.uml .focal .stereo {
+  fill: var(--rust);
+}
+.uml .cname {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.uml .cname.italic {
+  font-style: italic;
+}
+.uml .client-tag {
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  fill: var(--muted-2);
+}
+.uml .member {
+  font-size: 9px;
+  fill: var(--ink-2);
+}
+.uml .rel {
+  fill: none;
+  stroke-width: 1.2;
+}
+.uml .rel-ink {
+  stroke: var(--ink);
+}
+.uml .rel-muted {
+  stroke: var(--muted);
+}
+.uml .rel.accent {
+  stroke: var(--rust);
+}
+.uml .dash-5 {
+  stroke-dasharray: 5 4;
+}
+.uml .dash-4 {
+  stroke-dasharray: 4 3;
+}
+.uml .mk-hollow {
+  fill: var(--node);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+}
+.uml .mk-hollow.accent {
+  stroke: var(--rust);
+}
+.uml .mk-filled {
+  fill: var(--ink);
+}
+.uml .mk-open {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.2;
+}
+.uml .mk-open.accent {
+  stroke: var(--rust);
+}
+.uml .mask {
+  fill: var(--sheet);
+}
+.uml .arrow-label {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  fill: var(--muted);
+}
+.uml .arrow-label.accent {
+  fill: var(--rust);
+}
+.uml .mult {
+  font-size: 8px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.uml .note-box {
+  fill: var(--violet);
+  stroke: var(--violet-line);
+  stroke-width: 1;
+}
+.uml .note-fold {
+  fill: none;
+  stroke: var(--violet-line);
+  stroke-width: 1;
+}
+.uml .note-text {
+  font-size: 10px;
+  fill: var(--violet-ink);
+}
+.uml .note-link {
+  stroke: var(--violet-line);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+.uml .legend-rule {
+  stroke: var(--line);
+  stroke-width: 0.8;
+}
+.uml .legend-title {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  fill: var(--muted);
+}
+.uml .legend-text {
+  font-size: 8.5px;
+  fill: var(--muted);
+}
+.uml .cls {
+  transition: opacity 0.3s ease;
+}
+.uml.has-dim .cls:not(.lit) {
+  opacity: 0.35;
+}
+.uml .lit .box {
+  fill: var(--green);
+}
+
+/* ───────────── Sequence diagram (động) ───────────── */
+.seq {
+  width: 100%;
+  height: auto;
+  display: block;
+  font-family: var(--font);
+}
+.seq .p-shadow {
+  fill: var(--drop);
+}
+.seq .p-box {
+  fill: var(--node);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  transition: fill 0.3s ease;
+}
+.seq .p.focal .p-box {
+  fill: #fdeedd;
+  stroke: var(--rust);
+}
+:root[data-theme="dark"] .seq .p.focal .p-box {
+  fill: #3a2a1f;
+}
+.seq .p.on .p-box {
+  fill: var(--green);
+}
+.seq .p-label {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.seq .lifeline {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.seq .p.on .lifeline {
+  stroke: var(--green-3);
+}
+.seq .msg {
+  transition: opacity 0.35s ease;
+}
+.seq .msg-line {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.2;
+}
+.seq .k-return .msg-line,
+.seq .k-async .msg-line,
+.seq .k-create .msg-line {
+  stroke: var(--muted);
+  stroke-dasharray: 5 4;
+}
+.seq .msg-label {
+  font-size: 11px;
+  fill: var(--ink-2);
+}
+.seq .k-return .msg-label,
+.seq .k-create .msg-label {
+  fill: var(--muted);
+}
+.seq .msg-mask {
+  fill: var(--sheet);
+}
+.seq .mk-filled {
+  fill: var(--ink-2);
+}
+.seq .mk-filled.ret {
+  fill: var(--muted);
+}
+.seq .mk-open {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.2;
+}
+.seq .mk-accent {
+  fill: var(--rust);
+}
+.seq .msg.future {
+  opacity: 0.14;
+}
+.seq .msg.active .msg-line {
+  stroke: var(--rust);
+  stroke-width: 1.8;
+}
+.seq .msg.active .msg-label {
+  fill: var(--rust);
+  font-weight: 700;
+}
+.seq .step-dot {
+  fill: var(--card);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+.seq .step-num {
+  font-size: 9px;
+  font-weight: 700;
+  fill: var(--muted);
+}
+.seq .step-badge.active .step-dot {
+  fill: var(--green);
+  stroke: var(--ink);
+}
+.seq .step-badge.active .step-num {
+  fill: var(--ink);
+}
+.seq .step-badge.done .step-dot {
+  fill: var(--green-2);
+  stroke: var(--green-3);
+}
+.seq .frag-box {
+  fill: rgba(80, 60, 35, 0.025);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+.seq .frag-tab {
+  fill: var(--violet);
+  stroke: var(--violet-line);
+}
+.seq .frag-kind {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  fill: var(--violet-ink);
+}
+.seq .frag-guard {
+  font-size: 9px;
+  fill: var(--violet-ink);
+}
+.seq .token {
+  fill: var(--rust);
+  stroke: var(--node);
+  stroke-width: 1.5;
+  opacity: 0;
+  animation: seq-travel 900ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+@keyframes seq-travel {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(var(--dx));
+  }
+}
+.seq .self-pulse {
+  fill: none;
+  stroke: var(--rust);
+  stroke-width: 1.5;
+  opacity: 0;
+  animation: seq-pulse 900ms ease forwards;
+}
+@keyframes seq-pulse {
+  0% {
+    opacity: 0.9;
+    r: 3;
+  }
+  100% {
+    opacity: 0;
+    r: 14;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .seq .token,
+  .seq .self-pulse {
+    display: none;
+  }
+}
+@media print {
+  .seq .msg.future {
+    opacity: 1;
+  }
+  .seq .token,
+  .seq .self-pulse,
+  [data-motion-controls] {
+    display: none !important;
+  }
+}
