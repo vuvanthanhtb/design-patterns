@@ -1,0 +1,19 @@
+# Copyright (c) 2026 vuvanthanhtb
+# SPDX-License-Identifier: MIT
+node_modules
+.next
+out
+build
+coverage
+.git
+.gitignore
+.vercel
+.env*
+*.tsbuildinfo
+npm-debug.log*
+Dockerfile
+docker-compose.yml
+.dockerignore
+README.md
+LICENSE
+.DS_Store

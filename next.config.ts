@@ -6,7 +6,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Tạo .next/standalone chỉ gồm file cần để chạy — dùng cho Docker image gọn nhẹ
+  output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
 };

@@ -21,6 +21,21 @@ npm run verify:examples   # (tuỳ chọn) chạy lại 23 ví dụ TS + Java, s
 Phím tắt trong bài học: `←` `→` chuyển bước · `Space` tự chạy/tạm dừng · `R` phát lại · `Home`/`End` ·
 `⌘K` tìm kiếm (không dấu cũng được). Deep-link một bước: `/patterns/observer?step=5`.
 
+## Docker
+
+```bash
+docker compose up -d --build              # production → http://localhost:3000
+PORT=8080 docker compose up -d --build    # đổi cổng
+docker compose --profile dev up dev       # dev có hot reload → http://localhost:3001
+docker compose down
+```
+
+- `Dockerfile` build 3 tầng (deps → builder → runner) với `output: "standalone"`. Image chạy bằng
+  user `nextjs` (uid 1001), không phải root, và có `HEALTHCHECK`.
+- Service `web` được siết bảo mật: filesystem chỉ đọc (chỉ `.next/cache` và
+  `.next/server/route-cache` là tmpfs ghi được), `cap_drop: ALL`, `no-new-privileges`.
+- `src/proxy.ts` trả HTTP 404 thật cho slug không tồn tại (trang bài học stream nên mặc định luôn là 200).
+
 ## Dữ liệu
 
 Toàn bộ dữ liệu là **hằng số trong mã nguồn — không gọi API**, mọi trang được prerender tĩnh:
