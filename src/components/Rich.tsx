@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 /** Hiển thị đoạn văn có `inline code` dạng markdown tối giản. */
 export function Rich({ text }: { text: string }) {
   const parts = text.split(/(`[^`]+`)/g);

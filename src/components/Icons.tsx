@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 // Bộ icon nét mảnh, kế thừa currentColor.
 type P = { size?: number };
 const base = (size = 14) => ({

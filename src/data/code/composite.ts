@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 // Dữ liệu cứng: mã nguồn ví dụ composite (TypeScript + Java) và output đã chạy thật.
 export const composite = {
   javaFile: "CompositeDemo.java",

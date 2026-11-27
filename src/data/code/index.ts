@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import type { ExampleCode } from "@/lib/types";
 import { abstractFactory } from "./abstract-factory";
 import { adapter } from "./adapter";

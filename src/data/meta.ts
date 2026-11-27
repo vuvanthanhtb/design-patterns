@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import type { Category, Pattern } from "@/lib/types";
 
 export type PatternMeta = Pattern;

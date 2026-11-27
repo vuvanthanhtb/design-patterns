@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import { behavioral } from "./behavioral";
 import { creational } from "./creational";
 import type { PatternMeta } from "./meta";

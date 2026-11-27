@@ -25,5 +25,7 @@
     "eslint-config-next": "16.4.6",
     "prettier": "^3.10.1",
     "typescript": "^5"
-  }
+  },
+  "license": "MIT",
+  "author": "vuvanthanhtb"
 }

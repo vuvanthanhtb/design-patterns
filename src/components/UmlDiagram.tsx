@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import type { Diagram, UmlClass, UmlNote, UmlRelation } from "@/lib/types";
 import {
   type Box,

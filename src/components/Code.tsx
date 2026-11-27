@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import { CopyButton } from "./CopyButton";
 
 const KEYWORDS = new Set(

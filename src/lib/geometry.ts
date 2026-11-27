@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import type { Diagram, Side, UmlClass, UmlRelation } from "./types";
 
 export const NAME_H = 40;

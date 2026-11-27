@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 // Dữ liệu cứng: mã nguồn ví dụ observer (TypeScript + Java) và output đã chạy thật.
 export const observer = {
   javaFile: "ObserverDemo.java",

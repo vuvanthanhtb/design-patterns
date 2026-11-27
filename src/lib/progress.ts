@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 // Tiến độ học lưu trong trình duyệt của từng người xem (tiện ích cá nhân, không gửi đi đâu).
 const KEY = "dp-progress";
 const EVENT = "dp-progress";

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Rich } from "@/components/Rich";

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import type { SeqMessage, Sequence } from "@/lib/types";
 
 // Ký hiệu ngắn gọn cho các loại thông điệp UML sequence

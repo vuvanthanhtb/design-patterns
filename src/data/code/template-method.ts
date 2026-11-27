@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 // Dữ liệu cứng: mã nguồn ví dụ template-method (TypeScript + Java) và output đã chạy thật.
 export const templateMethod = {
   javaFile: "TemplateMethodDemo.java",

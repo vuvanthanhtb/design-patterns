@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import Link from "next/link";
 import { UmlDiagram } from "@/components/UmlDiagram";
 import { CATEGORY_INFO } from "@/data/meta";

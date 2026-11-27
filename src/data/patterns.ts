@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 import { EXAMPLES } from "./code";
 import { PATTERNS } from "./nav";
 import { SEQUENCES } from "./sequences";

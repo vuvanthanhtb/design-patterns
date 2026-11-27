@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 export type Category = "creational" | "structural" | "behavioral";
 
 export type ClassKind = "class" | "interface" | "abstract" | "client";

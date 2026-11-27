@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 // Dữ liệu cứng: mã nguồn ví dụ abstract-factory (TypeScript + Java) và output đã chạy thật.
 export const abstractFactory = {
   javaFile: "AbstractFactoryDemo.java",

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 vuvanthanhtb
+ * SPDX-License-Identifier: MIT
+ */
+
 // Kiểm chứng dữ liệu cứng: chạy lại code TS/Java trong src/data/code/*.ts
 // và so sánh với output đã lưu. Không dùng khi build — chỉ để bảo trì.
 //   node scripts/verify-examples.mjs          (cần Node ≥ 22.18, JDK ≥ 21 cho Java)
