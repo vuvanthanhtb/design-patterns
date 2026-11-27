@@ -36,6 +36,24 @@ docker compose down
   `.next/server/route-cache` là tmpfs ghi được), `cap_drop: ALL`, `no-new-privileges`.
 - `src/proxy.ts` trả HTTP 404 thật cho slug không tồn tại (trang bài học stream nên mặc định luôn là 200).
 
+## SEO
+
+Đặt domain thật **lúc build** (các trang được prerender tĩnh nên URL tuyệt đối được ghi vào HTML):
+
+```bash
+SITE_URL=https://your-domain.com npm run build
+SITE_URL=https://your-domain.com docker compose up -d --build
+```
+
+- Metadata đầy đủ cho từng trang: `title`, `description`, `keywords`, canonical, Open Graph, Twitter card,
+  `robots`, `theme-color` (`src/lib/site.ts` là cấu hình chung).
+- Ảnh chia sẻ 1200×630 sinh bằng code theo giao diện của trang: `/opengraph-image` và
+  `/patterns/<slug>/opengraph-image` (23 ảnh render sẵn lúc build; font JetBrains Mono có dấu tiếng Việt
+  nằm trong `src/assets/fonts`, giấy phép OFL).
+- `sitemap.xml` (25 URL + ảnh), `robots.txt`, `manifest.webmanifest`, `icon.svg`.
+- JSON-LD schema.org: `WebSite` + `Course` (trang chủ), `ItemList` (cheatsheet),
+  `LearningResource` + `BreadcrumbList` (mỗi bài học).
+
 ## Dữ liệu
 
 Toàn bộ dữ liệu là **hằng số trong mã nguồn — không gọi API**, mọi trang được prerender tĩnh:

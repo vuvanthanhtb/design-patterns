@@ -12,7 +12,10 @@ RUN --mount=type=cache,target=/root/.npm npm ci
 # ───────────── 2. builder: build Next.js (output: standalone) ─────────────
 FROM node:24-alpine AS builder
 WORKDIR /app
-ENV NEXT_TELEMETRY_DISABLED=1
+# URL công khai của site — dùng cho canonical, sitemap, Open Graph (ghi vào HTML lúc build)
+ARG SITE_URL=http://localhost:3000
+ENV NEXT_TELEMETRY_DISABLED=1 \
+    SITE_URL=${SITE_URL}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build

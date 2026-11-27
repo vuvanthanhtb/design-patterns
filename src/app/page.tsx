@@ -3,18 +3,71 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
 import { UmlDiagram } from "@/components/UmlDiagram";
 import { CATEGORY_INFO } from "@/data/meta";
 import { number, PATTERNS } from "@/data/patterns";
 import { SEQUENCES } from "@/data/sequences";
+import { absoluteUrl, SITE } from "@/lib/site";
 import type { Category } from "@/lib/types";
 
 const ORDER: Category[] = ["creational", "structural", "behavioral"];
 
+export const metadata: Metadata = {
+  title: { absolute: SITE.title },
+  alternates: { canonical: "/" },
+};
+
+/** schema.org: website + khoá học gồm 23 bài (mỗi bài là một LearningResource). */
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": absoluteUrl("/#website"),
+      url: absoluteUrl("/"),
+      name: SITE.name,
+      description: SITE.description,
+      inLanguage: SITE.language,
+      author: { "@type": "Person", name: SITE.author },
+    },
+    {
+      "@type": "Course",
+      "@id": absoluteUrl("/#course"),
+      name: SITE.title,
+      description: SITE.description,
+      url: absoluteUrl("/"),
+      inLanguage: SITE.language,
+      isAccessibleForFree: true,
+      educationalLevel: "Intermediate",
+      teaches: "23 mẫu thiết kế GoF với TypeScript và Java",
+      provider: { "@type": "Person", name: SITE.author },
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "online",
+        courseWorkload: "PT4H",
+      },
+      offers: {
+        "@type": "Offer",
+        price: 0,
+        priceCurrency: "VND",
+        category: "Free",
+      },
+      hasPart: PATTERNS.map((p) => ({
+        "@type": "LearningResource",
+        name: `${p.name} — ${p.viName}`,
+        url: absoluteUrl(`/patterns/${p.slug}`),
+      })),
+    },
+  ],
+};
+
 export default function Overview() {
   return (
     <div className="overview">
+      <JsonLd data={structuredData} />
       <section className="card hero">
         <p className="crumb">Khoá học · 23 bài · TypeScript & Java</p>
         <h1>

@@ -6,9 +6,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { JsonLd } from "@/components/JsonLd";
 import { LessonPlayer } from "@/components/LessonPlayer";
 import { CATEGORY_INFO } from "@/data/meta";
 import { getPattern, PATTERNS } from "@/data/patterns";
+import { absoluteUrl, OG_BASE, SITE } from "@/lib/site";
 
 const CAT_NUM = {
   creational: "01",
@@ -27,10 +29,33 @@ export async function generateMetadata({
 }: PageProps<"/patterns/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const found = getPattern(slug);
-  if (!found) return {};
+  if (!found) return { title: "Không tìm thấy", robots: { index: false } };
+  const p = found.pattern;
+  const title = `${p.name} (${p.viName}) — mẫu thiết kế ${CATEGORY_INFO[p.category].label}`;
+  const description = `${p.intent} Sơ đồ UML động, ví dụ TypeScript và Java.`;
+  const path = `/patterns/${slug}`;
   return {
-    title: `${found.pattern.name} — ${found.pattern.viName}`,
-    description: found.pattern.intent,
+    title,
+    description,
+    keywords: [
+      p.name,
+      p.viName,
+      `${p.name} pattern`,
+      `${p.name} TypeScript`,
+      `${p.name} Java`,
+      ...SITE.keywords,
+    ],
+    alternates: { canonical: path },
+    openGraph: {
+      ...OG_BASE,
+      type: "article",
+      url: path,
+      title,
+      description,
+      section: CATEGORY_INFO[p.category].label,
+      authors: [SITE.author],
+    },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -54,25 +79,78 @@ async function Lesson({ params }: { params: Params }) {
   const { pattern, sequence, example, index, prev, next } = found;
   const siblings = PATTERNS.filter((x) => x.category === pattern.category);
 
+  const url = absoluteUrl(`/patterns/${slug}`);
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LearningResource",
+        "@id": `${url}#lesson`,
+        name: `${pattern.name} — ${pattern.viName}`,
+        description: pattern.intent,
+        url,
+        image: absoluteUrl(`/patterns/${slug}/opengraph-image`),
+        inLanguage: SITE.language,
+        learningResourceType: "Lesson",
+        educationalLevel: "Intermediate",
+        isAccessibleForFree: true,
+        teaches: `Mẫu thiết kế ${pattern.name}`,
+        about: [
+          { "@type": "Thing", name: "Design pattern" },
+          { "@type": "Thing", name: pattern.name },
+        ],
+        author: { "@type": "Person", name: SITE.author },
+        isPartOf: {
+          "@type": "Course",
+          "@id": absoluteUrl("/#course"),
+          name: SITE.title,
+        },
+        position: index + 1,
+        programmingLanguage: ["TypeScript", "Java"],
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: SITE.name,
+            item: absoluteUrl("/"),
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: CATEGORY_INFO[pattern.category].vi,
+            item: absoluteUrl(`/#${pattern.category}`),
+          },
+          { "@type": "ListItem", position: 3, name: pattern.name, item: url },
+        ],
+      },
+    ],
+  };
+
   return (
-    <LessonPlayer
-      key={pattern.slug}
-      pattern={pattern}
-      sequence={sequence}
-      example={example}
-      index={index}
-      total={PATTERNS.length}
-      categoryLabel={CATEGORY_INFO[pattern.category].vi
-        .replace("Nhóm ", "")
-        .replace(/^./, (c) => c.toUpperCase())}
-      categoryNum={CAT_NUM[pattern.category]}
-      lessonInCategory={{
-        n: siblings.findIndex((x) => x.slug === slug) + 1,
-        of: siblings.length,
-      }}
-      prev={prev && { slug: prev.slug, name: prev.name }}
-      next={next && { slug: next.slug, name: next.name }}
-    />
+    <>
+      <JsonLd data={structuredData} />
+      <LessonPlayer
+        key={pattern.slug}
+        pattern={pattern}
+        sequence={sequence}
+        example={example}
+        index={index}
+        total={PATTERNS.length}
+        categoryLabel={CATEGORY_INFO[pattern.category].vi
+          .replace("Nhóm ", "")
+          .replace(/^./, (c) => c.toUpperCase())}
+        categoryNum={CAT_NUM[pattern.category]}
+        lessonInCategory={{
+          n: siblings.findIndex((x) => x.slug === slug) + 1,
+          of: siblings.length,
+        }}
+        prev={prev && { slug: prev.slug, name: prev.name }}
+        next={next && { slug: next.slug, name: next.name }}
+      />
+    </>
   );
 }
 

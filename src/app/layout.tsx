@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { JetBrains_Mono } from "next/font/google";
 import { HeaderTabs } from "@/components/HeaderTabs";
@@ -11,6 +11,7 @@ import { Logo } from "@/components/Icons";
 import { SearchBox } from "@/components/SearchBox";
 import { Sidebar } from "@/components/Sidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { OG_BASE, SITE } from "@/lib/site";
 import "./globals.css";
 import "./site.css";
 
@@ -22,12 +23,46 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Design Patterns · 23 mẫu GoF",
-    template: "%s · Design Patterns",
+  metadataBase: new URL(`${SITE.url}/`),
+  title: { default: SITE.title, template: `%s · ${SITE.name}` },
+  description: SITE.description,
+  applicationName: SITE.name,
+  keywords: [...SITE.keywords],
+  authors: [{ name: SITE.author }],
+  creator: SITE.author,
+  publisher: SITE.author,
+  category: "education",
+  alternates: { canonical: "/" },
+  openGraph: {
+    ...OG_BASE,
+    type: "website",
+    url: "/",
+    title: SITE.title,
+    description: SITE.description,
   },
-  description:
-    "Học 23 mẫu thiết kế GoF qua sơ đồ UML động, ví dụ TypeScript và Java.",
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description: SITE.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  formatDetection: { telephone: false, email: false, address: false },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4ebe0" },
+    { media: "(prefers-color-scheme: dark)", color: "#191714" },
+  ],
 };
 
 // Áp theme đã lưu trước lần paint đầu tiên để không bị nháy.

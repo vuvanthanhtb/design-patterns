@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Copyright (c) 2026 vuvanthanhtb · SPDX-License-Identifier: MIT -->
+  <rect width="32" height="32" rx="7" fill="#f4ebe0"/>
+  <rect x="4" y="5" width="14" height="10" rx="2" fill="#cfe3b2" stroke="#1d1b18" stroke-width="1.8"/>
+  <rect x="14" y="18" width="14" height="10" rx="2" fill="#e7ddf5" stroke="#1d1b18" stroke-width="1.8"/>
+  <path d="M10 15v8h4" fill="none" stroke="#1d1b18" stroke-width="1.8"/>
+</svg>

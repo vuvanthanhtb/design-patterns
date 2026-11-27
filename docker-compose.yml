@@ -12,6 +12,9 @@ services:
       context: .
       dockerfile: Dockerfile
       target: runner
+      args:
+        # Đặt domain thật khi deploy: SITE_URL=https://example.com docker compose up -d --build
+        SITE_URL: ${SITE_URL:-http://localhost:3000}
     image: design-patterns:latest
     container_name: design-patterns
     ports:
