@@ -135,3 +135,46 @@ export interface Viz {
   seriesAt?: "tl" | "br";
   frames: VizFrame[];
 }
+
+/* ───────── Cảnh 3D (Three.js) — mỗi khung khớp 1:1 với khung 2D ───────── */
+
+export type SurfaceMode = "prob" | "class" | "loss" | "density" | "decision";
+
+export interface Scene3DPoint {
+  id: string;
+  x: number;
+  y: number;
+  z: number;
+  cls?: number;
+  kind?: "data" | "query" | "ball";
+  ring?: boolean;
+}
+
+export interface Scene3DFrame {
+  /** Chiều cao mặt cong trên lưới nx × ny (hàng theo y tăng dần); bỏ trống = mặt phẳng z = zFloor. */
+  surface?: number[];
+  /** Màu theo lớp cho từng đỉnh (chế độ density / class); bỏ trống = tô theo chiều cao. */
+  surfaceCls?: number[];
+  points: Scene3DPoint[];
+  /** Đường đi (Gradient Descent). */
+  path?: [number, number, number][];
+  /** Mặt phẳng ngang trong suốt tại các độ cao (lề SVM, P = 0.5). */
+  planes?: { z: number; label: string }[];
+  /** Chỉ số riêng của khung 3D (khi cảnh 3D mô tả đại lượng khác bản 2D). */
+  metrics?: { label: string; value: string }[];
+}
+
+export interface Viz3D {
+  xLabel: string;
+  yLabel: string;
+  zLabel: string;
+  x: [number, number];
+  y: [number, number];
+  z: [number, number];
+  nx: number;
+  ny: number;
+  mode: SurfaceMode;
+  /** Ghi chú cách đọc biểu đồ 3D của bài. */
+  note: string;
+  frames: Scene3DFrame[];
+}

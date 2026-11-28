@@ -7,6 +7,19 @@ Hai khoá học tương tác bằng sơ đồ động:
 | `/patterns` — Design Patterns   | 23  | TypeScript, Java              | Sơ đồ lớp UML + sơ đồ tuần tự chạy từng thông điệp       |
 | `/ml` — Machine Learning cơ bản | 11  | Python (NumPy + scikit-learn) | Mô phỏng huấn luyện: đường hồi quy, vùng quyết định, cụm |
 
+## Chế độ 3D
+
+- **Biểu đồ ML 3D** (Three.js / WebGL, `src/components/ml/Scene3D.tsx`) cho 9/11 bài: mặt phẳng 2D được nâng
+  thành mặt cong có độ cao là đầu ra của mô hình — mặt mất mát MSE(w, b) với viên bi Gradient Descent, tấm xác suất
+  sigmoid, hai đồi Gauss của Naive Bayes, mặt bậc thang của cây/rừng, mặt phẳng quyết định SVM với hai tấm lề ±1,
+  mặt yên ngựa của MLP trên XOR. Kéo để xoay, cuộn để phóng to; mỗi khung 3D khớp 1:1 với khung 2D
+  và được tính sẵn lúc build (`src/lib/ml/viz3d.ts`).
+- **Sa bàn UML isometric** (CSS 3D, `src/components/UmlIsometric.tsx`): mỗi lớp là một khối nổi trên sàn,
+  quan hệ vẽ dưới sàn, lớp trọng tâm được nâng cao.
+- Công tắc **2D / 3D** trên sân khấu; lựa chọn được nhớ trong trình duyệt. Mặc định 3D.
+- Three.js (~520 KB) chỉ tải khi biểu đồ 3D xuất hiện lần đầu; trình duyệt không có WebGL tự dùng bản 2D.
+  `prefers-reduced-motion` tắt nội suy và tự xoay.
+
 ## Khoá Machine Learning
 
 Gradient Descent · Linear Regression · Logistic Regression · k-NN · Naive Bayes · Decision Tree ·

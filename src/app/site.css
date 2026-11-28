@@ -1387,34 +1387,86 @@ kbd {
 
 /* ───────────── Nhiều khoá học ───────────── */
 .course-switch {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  padding: 3px;
   margin-bottom: 1rem;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--card-2);
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--line-strong);
 }
-.course-switch a {
-  padding: 0.3rem 0.15rem;
-  border: 1.5px solid transparent;
-  border-radius: 7px;
+.side-label {
+  margin: 0 0 0.45rem 0.15rem;
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+.course-switch ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.course-pick {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
   color: var(--muted);
-  white-space: nowrap;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
-.course-switch a:hover {
+.course-pick:hover {
   color: var(--ink);
+  border-color: var(--line-strong);
+  transform: translateX(2px);
 }
-.course-switch a.on {
+.course-pick.on {
   color: var(--ink);
-  background: var(--sheet);
+  background: var(--green);
   border-color: var(--ink);
-  box-shadow: 1px 1.5px 0 var(--drop);
+  box-shadow: var(--pop-shadow);
+}
+.course-num {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  font-size: 10.5px;
+  font-weight: 800;
+  border: 1.5px solid currentColor;
+  border-radius: 7px;
+  background: var(--sheet);
+}
+.course-pick.on .course-num {
+  border-color: var(--ink);
+}
+.course-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+.course-text b {
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.course-text small {
+  font-size: 10px;
+  color: var(--muted-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.course-pick.on .course-text small {
+  color: var(--ink-2);
 }
 .chip-cat.cat-foundation {
   background: var(--orange);
@@ -1787,5 +1839,409 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
   .plot * {
     transition: none !important;
+  }
+}
+
+/* ───────────── Cảnh 3D (Three.js) ───────────── */
+.scene3d {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  align-self: stretch;
+  min-height: 440px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--sheet);
+  animation: fade-up 0.35s ease;
+}
+.scene3d-canvas,
+.scene3d-canvas canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  cursor: grab;
+}
+.scene3d-canvas canvas:active {
+  cursor: grabbing;
+}
+.scene3d-hint {
+  position: absolute;
+  left: 0.8rem;
+  bottom: 0.6rem;
+  padding: 0.15rem 0.55rem;
+  font-size: 10px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--sheet) 85%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  pointer-events: none;
+}
+.scene3d-loading {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+.view-toggle {
+  display: inline-flex;
+  margin-left: auto;
+  padding: 3px;
+  gap: 3px;
+  border: 1.5px solid var(--ink);
+  border-radius: 9px;
+  background: var(--card-2);
+  box-shadow: var(--pop-shadow);
+}
+.view-toggle button {
+  min-width: 40px;
+  padding: 0.25rem 0.55rem;
+  font-size: 11px;
+  font-weight: 800;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.view-toggle button.on {
+  background: var(--green);
+  color: var(--ink);
+}
+@media (max-width: 640px) {
+  .scene3d {
+    min-height: 340px;
+  }
+  .view-toggle {
+    margin-left: 0;
+  }
+}
+
+/* ───────────── Sa bàn UML isometric (CSS 3D) ───────────── */
+.iso {
+  position: relative;
+  width: 100%;
+  max-width: 940px;
+  height: 480px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background:
+    radial-gradient(
+      ellipse at 50% 40%,
+      color-mix(in srgb, var(--sheet) 70%, var(--green) 30%) 0%,
+      transparent 65%
+    ),
+    var(--sheet);
+  animation: fade-up 0.35s ease;
+}
+.iso-board {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.iso-floor {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow:
+    0 0 0 1px var(--line-strong),
+    0 0 0 10px color-mix(in srgb, var(--card-2) 80%, transparent);
+}
+.iso-floor .uml {
+  width: 100%;
+  height: 100%;
+}
+.iso-floor .uml .mask {
+  fill: var(--card);
+}
+.iso-block {
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --top: var(--node);
+  --side: color-mix(in srgb, var(--node) 70%, var(--ink) 30%);
+  --side-2: color-mix(in srgb, var(--node) 52%, var(--ink) 48%);
+  --edge: var(--ink);
+}
+.iso-block:hover {
+  transform: translateZ(18px);
+}
+.iso-block.focal {
+  --top: #fdeedd;
+  --side: color-mix(in srgb, var(--rust) 70%, var(--node) 30%);
+  --side-2: color-mix(in srgb, var(--rust) 85%, var(--ink) 15%);
+  --edge: var(--rust);
+}
+:root[data-theme="dark"] .iso-block.focal {
+  --top: #3a2a1f;
+}
+.iso-block.iso-client {
+  --top: var(--card-2);
+  --edge: var(--muted);
+}
+.iso-shadow {
+  position: absolute;
+  inset: 4px -6px -10px 6px;
+  border-radius: 10px;
+  background: var(--drop);
+  opacity: 0.18;
+  filter: blur(6px);
+}
+.iso-top,
+.iso-face {
+  position: absolute;
+  backface-visibility: visible;
+}
+.iso-top {
+  inset: 0;
+  transform: translateZ(var(--d));
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--edge);
+  border-radius: 6px;
+  background: var(--top);
+  color: var(--ink);
+  overflow: hidden;
+}
+.iso-client .iso-top {
+  border-style: dashed;
+}
+.iso-top b {
+  display: block;
+  padding: 0 8px;
+  font-size: 12px;
+  line-height: 40px;
+  text-align: center;
+  white-space: nowrap;
+}
+.iso-top b.italic {
+  font-style: italic;
+  line-height: 20px;
+  padding-bottom: 8px;
+}
+.iso-stereo {
+  display: block;
+  padding-top: 8px;
+  font-size: 8px;
+  line-height: 12px;
+  text-align: center;
+  color: var(--muted);
+}
+.focal .iso-stereo {
+  color: var(--rust);
+}
+.focal .iso-top b {
+  background: var(--orange);
+}
+.iso-top ul {
+  list-style: none;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line-strong);
+  font-size: 9px;
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+.iso-top li.sep {
+  height: 0;
+  margin: 9px -14px 10px;
+  border-top: 1px solid var(--line-strong);
+}
+/* Bốn mặt bên — đứng thẳng từ sàn lên mặt trên */
+.iso-face {
+  border: 1.5px solid var(--edge);
+}
+.iso-n,
+.iso-s {
+  left: 0;
+  width: 100%;
+  height: var(--d);
+  background: var(--side);
+}
+.iso-n {
+  top: 0;
+  transform-origin: top;
+  transform: rotateX(90deg);
+}
+.iso-s {
+  top: 100%;
+  transform-origin: top;
+  transform: rotateX(90deg);
+  background: var(--side);
+}
+.iso-w,
+.iso-e {
+  top: 0;
+  height: 100%;
+  width: var(--d);
+  background: var(--side-2);
+}
+.iso-w {
+  left: 0;
+  transform-origin: left;
+  transform: rotateY(-90deg);
+}
+.iso-e {
+  left: 100%;
+  transform-origin: left;
+  transform: rotateY(-90deg);
+}
+.dp-view-toggle {
+  margin-left: auto;
+}
+@media (max-width: 640px) {
+  .iso {
+    height: 360px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iso-block,
+  .iso-board {
+    transition: none;
+  }
+}
+
+/* ───────────── Chạm 3D cho giao diện ───────────── */
+.hero-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(260px, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+.iso-hero {
+  position: relative;
+  height: 270px;
+}
+.iso-hero-stage {
+  position: absolute;
+  left: 50%;
+  top: 70%;
+  width: 260px;
+  height: 150px;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%) rotateX(56deg) rotateZ(-38deg);
+}
+.slab {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  --h: 26px;
+  --c: var(--violet);
+  animation: slab-float 5s ease-in-out infinite;
+}
+.slab-0 {
+  --z: 0px;
+}
+.slab-1 {
+  --z: 120px;
+  --c: var(--green);
+  inset: 14px 26px 14px 26px;
+  animation-delay: -2.5s;
+}
+@keyframes slab-float {
+  0%,
+  100% {
+    transform: translateZ(var(--z));
+  }
+  50% {
+    transform: translateZ(calc(var(--z) + 10px));
+  }
+}
+.slab-top {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(var(--h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 18px;
+  background: var(--c);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  color: var(--ink);
+}
+.slab-top b {
+  font-size: 17px;
+  font-weight: 800;
+}
+.slab-top span {
+  font-size: 10.5px;
+  color: var(--ink-2);
+}
+:root[data-theme="dark"] .slab-top {
+  color: var(--ink);
+}
+.slab-face {
+  position: absolute;
+  border: 2px solid var(--ink);
+  background: color-mix(in srgb, var(--c) 60%, var(--ink) 40%);
+}
+.slab-s {
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: var(--h);
+  transform-origin: top;
+  transform: rotateX(90deg);
+}
+.slab-e {
+  left: 100%;
+  top: 0;
+  width: var(--h);
+  height: 100%;
+  transform-origin: left;
+  transform: rotateY(-90deg);
+  background: color-mix(in srgb, var(--c) 45%, var(--ink) 55%);
+}
+
+/* Thẻ nghiêng theo phối cảnh khi rê chuột */
+.ov-card,
+.course-card {
+  transform-style: preserve-3d;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.25s ease,
+    border-color 0.2s ease;
+}
+.ov-card:hover,
+.course-card:hover {
+  transform: perspective(900px) rotateX(5deg) rotateY(-5deg) translateY(-3px);
+  box-shadow:
+    6px 10px 0 -2px var(--drop),
+    0 18px 30px -18px rgba(0, 0, 0, 0.5);
+}
+.ov-thumb > svg,
+.course-thumb > svg {
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ov-card:hover .ov-thumb > svg,
+.course-card:hover .course-thumb > svg {
+  transform: perspective(700px) rotateX(24deg) rotateZ(-4deg) scale(0.94);
+}
+@media (max-width: 900px) {
+  .hero-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .iso-hero {
+    height: 200px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slab {
+    animation: none;
+    transform: translateZ(var(--z));
+  }
+  .ov-card:hover,
+  .course-card:hover,
+  .ov-card:hover .ov-thumb > svg,
+  .course-card:hover .course-thumb > svg {
+    transform: none;
   }
 }

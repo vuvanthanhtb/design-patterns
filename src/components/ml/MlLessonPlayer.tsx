@@ -5,9 +5,10 @@
 
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useMemo } from "react";
-import type { MlLesson, PythonExample, Viz } from "@/lib/ml/types";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { MlLesson, PythonExample, Viz, Viz3D } from "@/lib/ml/types";
 import { useLessonController } from "@/lib/useLessonController";
 import { Code, Terminal } from "../Code";
 import {
@@ -23,6 +24,25 @@ import {
 } from "../Icons";
 import { Rich } from "../Rich";
 import { Plot, PlotLegend } from "./Plot";
+
+// Three.js chỉ tải khi người xem bật chế độ 3D
+const Scene3D = dynamic(() => import("./Scene3D"), {
+  ssr: false,
+  loading: () => (
+    <div className="scene3d scene3d-loading">Đang tải cảnh 3D…</div>
+  ),
+});
+
+const VIEW_KEY = "ml-view";
+
+function webglSupported() {
+  try {
+    const c = document.createElement("canvas");
+    return Boolean(c.getContext("webgl2") || c.getContext("webgl"));
+  } catch {
+    return false;
+  }
+}
 
 type StepKind = "problem" | "idea" | "sim" | "code" | "recap";
 interface Step {
@@ -42,6 +62,8 @@ const BADGE: Record<StepKind, [string, string]> = {
 interface Props {
   lesson: MlLesson;
   viz: Viz;
+  /** Cảnh 3D (null với bài chỉ có 2D). */
+  viz3d: Viz3D | null;
   example: PythonExample;
   groupLabel: string;
   groupNum: string;
@@ -53,6 +75,7 @@ interface Props {
 export function MlLessonPlayer({
   lesson: l,
   viz,
+  viz3d,
   example,
   groupLabel,
   groupNum,
@@ -97,6 +120,39 @@ export function MlLessonPlayer({
     progressKey: `ml:${l.slug}`,
   });
 
+  // Chế độ xem: SSR luôn là 2D (khung tĩnh đầy đủ); sau khi mount chuyển sang lựa chọn
+  // đã lưu — mặc định 3D nếu bài có cảnh 3D và trình duyệt hỗ trợ WebGL.
+  const [view, setView] = useState<"2d" | "3d">("2d");
+  const [webgl, setWebgl] = useState(false);
+  useEffect(() => {
+    const init = () => {
+      const ok = webglSupported();
+      setWebgl(ok);
+      let saved: string | null = null;
+      try {
+        saved = localStorage.getItem(VIEW_KEY);
+      } catch {
+        /* storage không khả dụng */
+      }
+      if (ok && viz3d && saved !== "2d") setView("3d");
+    };
+    init();
+  }, [viz3d]);
+  const chooseView = (v: "2d" | "3d") => {
+    setView(v);
+    try {
+      localStorage.setItem(VIEW_KEY, v);
+    } catch {
+      /* storage không khả dụng */
+    }
+  };
+  const fallback2d = useCallback(() => {
+    setWebgl(false);
+    setView("2d");
+  }, []);
+  const can3d = Boolean(viz3d) && webgl;
+  const show3d = can3d && view === "3d";
+
   const cur = steps[step];
   const frameIdx =
     cur.kind === "sim"
@@ -109,7 +165,7 @@ export function MlLessonPlayer({
 
   const stats =
     cur.kind === "sim" && frame
-      ? frame.metrics
+      ? (show3d && viz3d?.frames[frameIdx!]?.metrics) || frame.metrics
       : [
           { label: "BÀI TOÁN", value: l.task },
           { label: "NHÓM", value: groupLabel },
@@ -161,6 +217,26 @@ export function MlLessonPlayer({
                 </div>
               ))}
             </div>
+            {can3d && (cur.kind === "sim" || cur.kind === "recap") && (
+              <div
+                className="view-toggle"
+                role="radiogroup"
+                aria-label="Chế độ xem biểu đồ"
+              >
+                {(["2d", "3d"] as const).map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    role="radio"
+                    aria-checked={view === v}
+                    className={view === v ? "on" : undefined}
+                    onClick={() => chooseView(v)}
+                  >
+                    {v.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            )}
             {!reduced && (
               <div className="controls" data-motion-controls>
                 <button
@@ -211,16 +287,26 @@ export function MlLessonPlayer({
                 ))}
               </div>
             )}
-            {frame && (cur.kind === "sim" || cur.kind === "recap") && (
-              <div className="plot-wrap">
-                <Plot
-                  id={`plot-${l.slug}`}
-                  viz={viz}
-                  frame={frame}
+            {frame &&
+              (cur.kind === "sim" || cur.kind === "recap") &&
+              (show3d && viz3d ? (
+                <Scene3D
+                  viz={viz3d}
+                  frame={frameIdx!}
+                  reduced={reduced}
                   title={`${l.name} — ${frame.title}`}
+                  onUnsupported={fallback2d}
                 />
-              </div>
-            )}
+              ) : (
+                <div className="plot-wrap">
+                  <Plot
+                    id={`plot-${l.slug}`}
+                    viz={viz}
+                    frame={frame}
+                    title={`${l.name} — ${frame.title}`}
+                  />
+                </div>
+              ))}
             {cur.kind === "code" && (
               <div className="code-stage">
                 <Code
@@ -336,10 +422,14 @@ export function MlLessonPlayer({
                 <p>
                   <Rich text={frame.text} />
                 </p>
-                <KeyIdea title="KHUNG MÔ PHỎNG">
-                  Khung {frameIdx! + 1} / {viz.frames.length}. Các số liệu ở đầu
-                  sân khấu được tính trên đúng dữ liệu của code Python.
-                </KeyIdea>
+                {show3d && viz3d ? (
+                  <KeyIdea title="CÁCH ĐỌC BIỂU ĐỒ 3D">{viz3d.note}</KeyIdea>
+                ) : (
+                  <KeyIdea title="KHUNG MÔ PHỎNG">
+                    Khung {frameIdx! + 1} / {viz.frames.length}. Các số liệu ở
+                    đầu sân khấu được tính trên đúng dữ liệu của code Python.
+                  </KeyIdea>
+                )}
               </>
             )}
             {cur.kind === "code" && (

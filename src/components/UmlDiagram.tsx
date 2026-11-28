@@ -24,6 +24,8 @@ interface Props {
   className?: string;
   /** Làm nổi bật các lớp này, làm mờ phần còn lại. */
   highlight?: string[];
+  /** false = chỉ vẽ "sàn" (quan hệ, nhãn, ghi chú) — dùng cho sa bàn 3D. */
+  boxes?: boolean;
 }
 
 const LEGEND_H = 64;
@@ -35,6 +37,7 @@ export function UmlDiagram({
   legend = true,
   className,
   highlight,
+  boxes: drawBoxes = true,
 }: Props) {
   const lit = new Set(highlight ?? []);
   const boxes: Record<string, Box> = {};
@@ -66,9 +69,10 @@ export function UmlDiagram({
       ))}
 
       <g>
-        {diagram.classes.map((c) => (
-          <ClassBox key={c.id} c={c} b={boxes[c.id]} lit={lit.has(c.id)} />
-        ))}
+        {drawBoxes &&
+          diagram.classes.map((c) => (
+            <ClassBox key={c.id} c={c} b={boxes[c.id]} lit={lit.has(c.id)} />
+          ))}
       </g>
 
       {(diagram.notes ?? []).map((n, i) => (

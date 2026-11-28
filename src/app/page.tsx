@@ -67,19 +67,37 @@ export default function Home() {
   return (
     <div className="overview">
       <JsonLd data={structuredData} />
-      <section className="card hero">
-        <p className="crumb">
-          {COURSE_LIST.length} khoá học ·{" "}
-          {COURSE_LIST.reduce((s, c) => s + c.items.length, 0)} bài · miễn phí
-        </p>
-        <h1>
-          Học lập trình bằng <mark>sơ đồ động</mark>
-        </h1>
-        <p className="subtitle">
-          Mỗi bài là một chuỗi bước có hoạt ảnh: vấn đề → ý tưởng → mô phỏng
-          từng bước → code chạy thật → tổng kết. Toàn bộ nội dung và dữ liệu
-          được ghi sẵn, không cần đăng nhập.
-        </p>
+      <section className="card hero hero-split">
+        <div>
+          <p className="crumb">
+            {COURSE_LIST.length} khoá học ·{" "}
+            {COURSE_LIST.reduce((s, c) => s + c.items.length, 0)} bài · miễn phí
+          </p>
+          <h1>
+            Học lập trình bằng <mark>sơ đồ động</mark>
+          </h1>
+          <p className="subtitle">
+            Mỗi bài là một chuỗi bước có hoạt ảnh: vấn đề → ý tưởng → mô phỏng
+            từng bước → code chạy thật → tổng kết. Toàn bộ nội dung và dữ liệu
+            được ghi sẵn, không cần đăng nhập.
+          </p>
+        </div>
+        <div className="iso-hero" aria-hidden="true">
+          <div className="iso-hero-stage">
+            {COURSE_LIST.map((c, k) => (
+              <div key={c.id} className={`slab slab-${k}`}>
+                <div className="slab-face slab-s" />
+                <div className="slab-face slab-e" />
+                <div className="slab-top">
+                  <b>{c.title}</b>
+                  <span>
+                    {c.items.length} bài · {c.languages}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <ul className="course-grid">

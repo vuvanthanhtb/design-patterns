@@ -10,6 +10,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { MlLessonPlayer } from "@/components/ml/MlLessonPlayer";
 import { getMlLesson, ML_GROUP_NUM, ML_GROUPS, ML_LESSONS } from "@/data/ml";
 import { buildViz } from "@/lib/ml/viz";
+import { buildViz3D } from "@/lib/ml/viz3d";
 import { absoluteUrl, OG_BASE, SITE } from "@/lib/site";
 
 type Params = PageProps<"/ml/[slug]">["params"];
@@ -139,6 +140,7 @@ async function Lesson({ params }: { params: Params }) {
         key={lesson.slug}
         lesson={lesson}
         viz={buildViz(slug)}
+        viz3d={buildViz3D(slug)}
         example={example}
         groupLabel={ML_GROUPS[lesson.group].vi}
         groupNum={ML_GROUP_NUM[lesson.group]}

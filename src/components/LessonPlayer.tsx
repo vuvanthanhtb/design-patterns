@@ -6,7 +6,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { buildLessonSteps, lessonMinutes, type LessonStep } from "@/lib/lesson";
 import type { ExampleCode, Pattern, Sequence } from "@/lib/types";
 import { useLessonController } from "@/lib/useLessonController";
@@ -25,6 +25,7 @@ import {
 import { Rich } from "./Rich";
 import { SequenceDiagram } from "./SequenceDiagram";
 import { UmlDiagram } from "./UmlDiagram";
+import { UmlIsometric } from "./UmlIsometric";
 
 interface Props {
   pattern: Pattern;
@@ -78,6 +79,27 @@ export function LessonPlayer(props: Props) {
     replayFrom: firstFlow,
     progressKey: p.slug,
   });
+
+  // Sơ đồ lớp: SSR là 2D; sau khi mount dùng lựa chọn đã lưu (mặc định sa bàn 3D)
+  const [view, setView] = useState<"2d" | "3d">("2d");
+  useEffect(() => {
+    const init = () => {
+      try {
+        if (localStorage.getItem("dp-view") !== "2d") setView("3d");
+      } catch {
+        setView("3d");
+      }
+    };
+    init();
+  }, []);
+  const chooseView = (v: "2d" | "3d") => {
+    setView(v);
+    try {
+      localStorage.setItem("dp-view", v);
+    } catch {
+      /* storage không khả dụng */
+    }
+  };
 
   const cur = steps[step];
   const flowIndex = cur.kind === "flow" ? cur.index : null;
@@ -134,6 +156,26 @@ export function LessonPlayer(props: Props) {
                 }
               />
             </div>
+            {(cur.kind === "structure" || cur.kind === "recap") && (
+              <div
+                className="view-toggle dp-view-toggle"
+                role="radiogroup"
+                aria-label="Chế độ xem sơ đồ lớp"
+              >
+                {(["2d", "3d"] as const).map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    role="radio"
+                    aria-checked={view === v}
+                    className={view === v ? "on" : undefined}
+                    onClick={() => chooseView(v)}
+                  >
+                    {v.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            )}
             {!reduced && (
               <div className="controls" data-motion-controls>
                 <button
@@ -175,15 +217,22 @@ export function LessonPlayer(props: Props) {
                 </div>
               </div>
             )}
-            {(cur.kind === "structure" || cur.kind === "recap") && (
-              <div className="diagram-wrap">
-                <UmlDiagram
+            {(cur.kind === "structure" || cur.kind === "recap") &&
+              (view === "3d" ? (
+                <UmlIsometric
                   diagram={p.diagram}
-                  id={`cls-${p.slug}`}
+                  id={`iso-${p.slug}`}
                   title={`Sơ đồ lớp UML — ${p.name}`}
                 />
-              </div>
-            )}
+              ) : (
+                <div className="diagram-wrap">
+                  <UmlDiagram
+                    diagram={p.diagram}
+                    id={`cls-${p.slug}`}
+                    title={`Sơ đồ lớp UML — ${p.name}`}
+                  />
+                </div>
+              ))}
             {cur.kind === "flow" && (
               <div className="diagram-wrap">
                 <SequenceDiagram

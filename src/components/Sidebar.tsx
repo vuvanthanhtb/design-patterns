@@ -38,21 +38,36 @@ export function Sidebar() {
   return (
     <aside className="sidebar" aria-label="Khoá học">
       <nav className="course-switch" aria-label="Chọn khoá học">
-        {COURSE_LIST.map((c) => (
-          <Link
-            key={c.id}
-            href={c.overview}
-            className={c.id === course.id ? "on" : undefined}
-            aria-current={c.id === course.id ? "true" : undefined}
-          >
-            {c.title}
-          </Link>
-        ))}
+        <p className="side-label">Khoá học</p>
+        <ul>
+          {COURSE_LIST.map((c, i) => {
+            const on = c.id === course.id;
+            return (
+              <li key={c.id}>
+                <Link
+                  href={c.overview}
+                  className={`course-pick${on ? " on" : ""}`}
+                  aria-current={on ? "true" : undefined}
+                >
+                  <span className="course-num">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="course-text">
+                    <b>{c.title}</b>
+                    <small>
+                      {c.items.length} bài · {c.languages}
+                    </small>
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
       <div className="course-head">
         <Folder color="var(--ink)" />
         <span>{course.short}</span>
-        <span className="muted">{course.items.length} bài</span>
+        <span className="muted">Nội dung</span>
       </div>
       <ul className="tree">
         {course.groups.map((g, gi) => {
