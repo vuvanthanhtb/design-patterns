@@ -7,23 +7,32 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconBook, IconGrid, IconSheet } from "./Icons";
+import { courseFromPath, lessonFromPath } from "@/data/courses";
+import { IconBook, IconGrid, IconLayers, IconSheet } from "./Icons";
 
 export function HeaderTabs() {
   const path = usePathname();
+  const course = courseFromPath(path);
+  const inLesson = lessonFromPath(path) !== null;
   const tabs = [
+    { href: "/", label: "Khoá học", icon: <IconLayers />, on: path === "/" },
     {
-      href: path.startsWith("/patterns/") ? path : "/patterns/factory-method",
+      href: inLesson ? path : course.items[0].href,
       label: "Học",
       icon: <IconBook />,
-      on: path.startsWith("/patterns/"),
+      on: inLesson,
     },
-    { href: "/", label: "Tổng quan", icon: <IconGrid />, on: path === "/" },
     {
-      href: "/cheatsheet",
+      href: course.overview,
+      label: "Tổng quan",
+      icon: <IconGrid />,
+      on: path === course.overview,
+    },
+    {
+      href: course.cheatsheet,
       label: "Cheatsheet",
       icon: <IconSheet />,
-      on: path === "/cheatsheet",
+      on: path === course.cheatsheet,
     },
   ];
   return (

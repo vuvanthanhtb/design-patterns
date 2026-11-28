@@ -14,8 +14,8 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: SITE.language,
     start_url: "/",
     display: "standalone",
-    background_color: "#f4ebe0",
-    theme_color: "#f4ebe0",
+    background_color: "#191714",
+    theme_color: "#191714",
     categories: ["education", "developer"],
     icons: [{ src: "/icon.svg", sizes: "any", type: "image/svg+xml" }],
   };

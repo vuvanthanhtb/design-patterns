@@ -49,6 +49,14 @@
   --cat-creational: #5fae57;
   --cat-structural: #7c63d0;
   --cat-behavioral: #e8834d;
+  --cat-foundation: #e8834d;
+  --cat-supervised: #5fae57;
+  --cat-unsupervised: #7c63d0;
+
+  /* Màu lớp / cụm trong biểu đồ ML */
+  --cls0: #7c63d0;
+  --cls1: #e8834d;
+  --cls2: #3f8f4e;
   color-scheme: light;
 }
 

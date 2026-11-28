@@ -1,4 +1,37 @@
-# Design Patterns — 23 mẫu GoF
+# Học trực quan — Design Patterns & Machine Learning
+
+Hai khoá học tương tác bằng sơ đồ động:
+
+| Khoá                            | Bài | Ngôn ngữ                      | Biểu đồ động                                             |
+| ------------------------------- | --- | ----------------------------- | -------------------------------------------------------- |
+| `/patterns` — Design Patterns   | 23  | TypeScript, Java              | Sơ đồ lớp UML + sơ đồ tuần tự chạy từng thông điệp       |
+| `/ml` — Machine Learning cơ bản | 11  | Python (NumPy + scikit-learn) | Mô phỏng huấn luyện: đường hồi quy, vùng quyết định, cụm |
+
+## Khoá Machine Learning
+
+Gradient Descent · Linear Regression · Logistic Regression · k-NN · Naive Bayes · Decision Tree ·
+Random Forest · SVM · Perceptron & MLP · K-Means · PCA.
+
+Mỗi bài: Vấn đề → Ý tưởng & công thức → **mô phỏng từng khung** → code Python → tổng kết.
+
+- Code Python cài đặt từ đầu bằng NumPy rồi đối chiếu scikit-learn; output là kết quả chạy thật.
+- Biểu đồ động được tính **lúc build** bằng bản TypeScript của từng thuật toán (`src/lib/ml/algorithms.ts`),
+  viết theo đúng thứ tự phép tính của code NumPy nên ra cùng con số (w, b, loss, Gini, inertia…).
+  Mọi nguồn ngẫu nhiên (bootstrap của Random Forest, trọng số khởi tạo MLP) được ghi cứng ở cả hai phía.
+- Trình duyệt chỉ nhận khung hình đã tính sẵn; chuyển động bằng CSS transition (`transform`, `fill`).
+
+```
+src/lib/ml/datasets.ts     tập dữ liệu nhỏ, ghi cứng (dùng chung cho Python và biểu đồ)
+src/lib/ml/algorithms.ts   11 thuật toán bằng TypeScript
+src/lib/ml/viz.ts          dựng khung hình cho từng bài
+src/data/ml/lessons.ts     nội dung bài học
+src/data/ml/code/*.ts      code Python + output đã chạy thật
+src/components/ml/         Plot (biểu đồ động) + MlLessonPlayer
+```
+
+---
+
+# Khoá Design Patterns — 23 mẫu GoF
 
 Khoá học tương tác bằng Next.js 16 + TypeScript. Giao diện theo phong cách _lesson player_
 (lấy cảm hứng từ designed-to-scale.vercel.app): cây khoá học bên trái, sân khấu sơ đồ ở giữa,
@@ -15,7 +48,7 @@ Mỗi mẫu là một bài học:
 ```bash
 npm install
 npm run dev               # http://localhost:3000
-npm run verify:examples   # (tuỳ chọn) chạy lại 23 ví dụ TS + Java, so với output đã lưu
+npm run verify:examples   # (tuỳ chọn) chạy lại 23 ví dụ TS + Java và 11 ví dụ Python, so với output đã lưu
 ```
 
 Phím tắt trong bài học: `←` `→` chuyển bước · `Space` tự chạy/tạm dừng · `R` phát lại · `Home`/`End` ·

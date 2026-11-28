@@ -33,6 +33,9 @@ const CAT_BG: Record<string, string> = {
   creational: C.green,
   structural: C.violet,
   behavioral: C.orange,
+  foundation: C.orange,
+  supervised: C.green,
+  unsupervised: C.violet,
 };
 
 interface OgProps {
@@ -40,10 +43,18 @@ interface OgProps {
   title: string;
   subtitle: string;
   chips: { label: string; category?: string }[];
+  /** Nhãn góc phải trên (ngôn ngữ của khoá). */
+  meta?: string;
 }
 
 /** Ảnh chia sẻ theo đúng ngôn ngữ thiết kế của trang: giấy be, viền đậm, bóng cứng. */
-export async function renderOg({ eyebrow, title, subtitle, chips }: OgProps) {
+export async function renderOg({
+  eyebrow,
+  title,
+  subtitle,
+  chips,
+  meta = "TypeScript · Java · Python",
+}: OgProps) {
   const [regular, bold] = await fonts;
   return new ImageResponse(
     <div
@@ -103,7 +114,7 @@ export async function renderOg({ eyebrow, title, subtitle, chips }: OgProps) {
             }}
           />
         </div>
-        Design Patterns
+        Học trực quan
         <div
           style={{
             display: "flex",
@@ -113,7 +124,7 @@ export async function renderOg({ eyebrow, title, subtitle, chips }: OgProps) {
             color: C.muted,
           }}
         >
-          TypeScript · Java
+          {meta}
         </div>
       </div>
 

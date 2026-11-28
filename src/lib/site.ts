@@ -13,10 +13,10 @@ const rawUrl =
   "http://localhost:3000";
 
 export const SITE = {
-  name: "Design Patterns",
-  title: "Design Patterns · 23 mẫu GoF với sơ đồ UML động",
+  name: "Học trực quan",
+  title: "Học trực quan · Design Patterns & Machine Learning bằng sơ đồ động",
   description:
-    "Khoá học tương tác 23 mẫu thiết kế GoF (Creational, Structural, Behavioral): sơ đồ lớp UML, sơ đồ tuần tự động từng bước, ví dụ TypeScript và Java chạy được kèm output thật.",
+    "Hai khoá học lập trình tương tác bằng sơ đồ động: 23 mẫu thiết kế GoF (TypeScript, Java) và 11 thuật toán Machine Learning cơ bản (Python, NumPy, scikit-learn). Mô phỏng từng bước, code chạy thật kèm output.",
   url: rawUrl.replace(/\/+$/, ""),
   locale: "vi_VN",
   language: "vi",
@@ -31,6 +31,10 @@ export const SITE = {
     "sơ đồ tuần tự",
     "TypeScript",
     "Java",
+    "Python",
+    "machine learning",
+    "học máy",
+    "scikit-learn",
     "lập trình hướng đối tượng",
     "OOP",
     "kiến trúc phần mềm",

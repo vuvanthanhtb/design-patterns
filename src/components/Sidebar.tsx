@@ -8,18 +8,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
-import { CATEGORY_INFO } from "@/data/meta";
-import { NAV_INDEX } from "@/data/nav";
+import { COURSE_LIST, courseFromPath, lessonFromPath } from "@/data/courses";
 import { readProgress, subscribeProgress } from "@/lib/progress";
-import type { Category } from "@/lib/types";
 import { Folder, IconCheck, IconChevron, IconFile } from "./Icons";
-
-const ORDER: Category[] = ["creational", "structural", "behavioral"];
-const COLORS: Record<Category, string> = {
-  creational: "var(--cat-creational)",
-  structural: "var(--cat-structural)",
-  behavioral: "var(--cat-behavioral)",
-};
 
 let cache: { raw: string; value: string[] } = { raw: "", value: [] };
 function snapshot() {
@@ -29,46 +20,63 @@ function snapshot() {
   return cache.value;
 }
 const empty: string[] = [];
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export function Sidebar() {
   const path = usePathname();
-  const current = path.startsWith("/patterns/") ? path.split("/")[2] : null;
-  const currentCat = NAV_INDEX.find((p) => p.slug === current)?.category;
+  const course = courseFromPath(path);
+  const current = lessonFromPath(path);
+  const currentGroup = course.items.find((p) => p.slug === current)?.group;
   const done = useSyncExternalStore(subscribeProgress, snapshot, () => empty);
-  const [toggled, setToggled] = useState<Partial<Record<Category, boolean>>>(
-    {},
-  );
-  const isOpen = (c: Category) =>
-    toggled[c] ?? (currentCat ? c === currentCat : c === "creational");
+  const [toggled, setToggled] = useState<Record<string, boolean>>({});
+  const isOpen = (g: string) =>
+    toggled[`${course.id}:${g}`] ??
+    (currentGroup ? g === currentGroup : g === course.groups[0].id);
+  const doneCount = course.items.filter((p) =>
+    done.includes(p.progressKey),
+  ).length;
 
   return (
     <aside className="sidebar" aria-label="Khoá học">
+      <nav className="course-switch" aria-label="Chọn khoá học">
+        {COURSE_LIST.map((c) => (
+          <Link
+            key={c.id}
+            href={c.overview}
+            className={c.id === course.id ? "on" : undefined}
+            aria-current={c.id === course.id ? "true" : undefined}
+          >
+            {c.title}
+          </Link>
+        ))}
+      </nav>
       <div className="course-head">
         <Folder color="var(--ink)" />
-        <span>Khoá học</span>
-        <span className="muted">{NAV_INDEX.length} bài</span>
+        <span>{course.short}</span>
+        <span className="muted">{course.items.length} bài</span>
       </div>
       <ul className="tree">
-        {ORDER.map((cat, ci) => {
-          const items = NAV_INDEX.filter((p) => p.category === cat);
-          const count = items.filter((p) => done.includes(p.slug)).length;
-          const open = isOpen(cat);
+        {course.groups.map((g, gi) => {
+          const items = course.items.filter((p) => p.group === g.id);
+          const count = items.filter((p) =>
+            done.includes(p.progressKey),
+          ).length;
+          const open = isOpen(g.id);
           return (
-            <li key={cat}>
+            <li key={g.id}>
               <button
                 type="button"
                 className="tree-group"
                 aria-expanded={open}
-                onClick={() => setToggled((t) => ({ ...t, [cat]: !open }))}
+                onClick={() =>
+                  setToggled((t) => ({ ...t, [`${course.id}:${g.id}`]: !open }))
+                }
               >
                 <span className={`chev${open ? " open" : ""}`}>
                   <IconChevron size={12} />
                 </span>
-                <Folder color={COLORS[cat]} />
+                <Folder color={g.color} />
                 <span className="tree-title">
-                  {String(ci + 1).padStart(2, "0")}.{" "}
-                  {cap(CATEGORY_INFO[cat].vi.replace("Nhóm ", ""))}
+                  {String(gi + 1).padStart(2, "0")}. {g.label}
                 </span>
                 <span className="muted">
                   {count}/{items.length}
@@ -78,11 +86,11 @@ export function Sidebar() {
                 <ul className="tree-items">
                   {items.map((p) => {
                     const on = p.slug === current;
-                    const ok = done.includes(p.slug);
+                    const ok = done.includes(p.progressKey);
                     return (
                       <li key={p.slug}>
                         <Link
-                          href={`/patterns/${p.slug}`}
+                          href={p.href}
                           className={`tree-item${on ? " on" : ""}`}
                           aria-current={on ? "page" : undefined}
                         >
@@ -107,10 +115,10 @@ export function Sidebar() {
       <div className="progress-box">
         <span>TIẾN ĐỘ</span>
         <span className="progress-bar" aria-hidden>
-          <i style={{ width: `${(done.length / NAV_INDEX.length) * 100}%` }} />
+          <i style={{ width: `${(doneCount / course.items.length) * 100}%` }} />
         </span>
         <b>
-          {done.length} / {NAV_INDEX.length}
+          {doneCount} / {course.items.length}
         </b>
       </div>
     </aside>

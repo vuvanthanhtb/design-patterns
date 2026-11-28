@@ -48,6 +48,32 @@ for (const file of readdirSync(dir)
     `${okTs ? "✓" : "✗"} ts  ${hasJava ? (okJava ? "✓" : "✗") : "-"} java  ${slug}`,
   );
 }
+// ── Khoá Machine Learning: chạy lại code Python (cần python3 + numpy + scikit-learn)
+const mlDir = join(import.meta.dirname, "..", "src", "data", "ml", "code");
+let hasPython = true;
+try {
+  execFileSync("python3", ["-c", "import numpy, sklearn"], { stdio: "ignore" });
+} catch {
+  hasPython = false;
+  console.warn("⚠ Không có python3 + numpy + scikit-learn — bỏ qua khoá ML");
+}
+if (hasPython) {
+  for (const file of readdirSync(mlDir)
+    .filter((f) => f.endsWith(".ts") && f !== "index.ts")
+    .sort()) {
+    const mod = await import(pathToFileURL(join(mlDir, file)).href);
+    const ex = Object.values(mod)[0];
+    const pyFile = join(tmp, ex.file);
+    writeFileSync(pyFile, ex.python + "\n");
+    const out = execFileSync("python3", ["-W", "ignore", pyFile], {
+      encoding: "utf8",
+    }).trimEnd();
+    const ok = out === ex.output.join("\n");
+    if (!ok) failed++;
+    console.log(`${ok ? "✓" : "✗"} python  ml/${file.slice(0, -3)}`);
+  }
+}
+
 if (failed) {
   console.error(`\n${failed} ví dụ có output khác dữ liệu đã lưu`);
   process.exit(1);

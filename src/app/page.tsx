@@ -6,21 +6,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
+import { Plot } from "@/components/ml/Plot";
 import { UmlDiagram } from "@/components/UmlDiagram";
-import { CATEGORY_INFO } from "@/data/meta";
-import { number, PATTERNS } from "@/data/patterns";
-import { SEQUENCES } from "@/data/sequences";
+import { COURSE_LIST } from "@/data/courses";
+import { PATTERNS } from "@/data/patterns";
+import { buildViz } from "@/lib/ml/viz";
 import { absoluteUrl, SITE } from "@/lib/site";
-import type { Category } from "@/lib/types";
-
-const ORDER: Category[] = ["creational", "structural", "behavioral"];
 
 export const metadata: Metadata = {
   title: { absolute: SITE.title },
   alternates: { canonical: "/" },
 };
 
-/** schema.org: website + khoá học gồm 23 bài (mỗi bài là một LearningResource). */
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -34,101 +31,98 @@ const structuredData = {
       author: { "@type": "Person", name: SITE.author },
     },
     {
-      "@type": "Course",
-      "@id": absoluteUrl("/#course"),
-      name: SITE.title,
-      description: SITE.description,
-      url: absoluteUrl("/"),
-      inLanguage: SITE.language,
-      isAccessibleForFree: true,
-      educationalLevel: "Intermediate",
-      teaches: "23 mẫu thiết kế GoF với TypeScript và Java",
-      provider: { "@type": "Person", name: SITE.author },
-      hasCourseInstance: {
-        "@type": "CourseInstance",
-        courseMode: "online",
-        courseWorkload: "PT4H",
-      },
-      offers: {
-        "@type": "Offer",
-        price: 0,
-        priceCurrency: "VND",
-        category: "Free",
-      },
-      hasPart: PATTERNS.map((p) => ({
-        "@type": "LearningResource",
-        name: `${p.name} — ${p.viName}`,
-        url: absoluteUrl(`/patterns/${p.slug}`),
+      "@type": "ItemList",
+      name: "Các khoá học",
+      itemListElement: COURSE_LIST.map((c, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: absoluteUrl(c.overview),
+        name: c.title,
       })),
     },
   ],
 };
 
-export default function Overview() {
+export default function Home() {
+  const kmeans = buildViz("k-means");
+  const previews = {
+    patterns: (
+      <UmlDiagram
+        diagram={PATTERNS.find((p) => p.slug === "observer")!.diagram}
+        id="home-uml"
+        title="Sơ đồ lớp Observer"
+        legend={false}
+      />
+    ),
+    ml: (
+      <Plot
+        id="home-ml"
+        viz={kmeans}
+        frame={kmeans.frames[kmeans.frames.length - 1]}
+        title="K-Means hội tụ"
+        compact
+      />
+    ),
+  };
   return (
     <div className="overview">
       <JsonLd data={structuredData} />
       <section className="card hero">
-        <p className="crumb">Khoá học · 23 bài · TypeScript & Java</p>
+        <p className="crumb">
+          {COURSE_LIST.length} khoá học ·{" "}
+          {COURSE_LIST.reduce((s, c) => s + c.items.length, 0)} bài · miễn phí
+        </p>
         <h1>
-          Học <mark>Design Patterns</mark> bằng sơ đồ động
+          Học lập trình bằng <mark>sơ đồ động</mark>
         </h1>
         <p className="subtitle">
-          Mỗi mẫu là một bài học từng bước: vấn đề → cấu trúc lớp UML → sơ đồ
-          tuần tự chạy từng thông điệp → code TypeScript & Java với output thật
-          → tổng kết.
+          Mỗi bài là một chuỗi bước có hoạt ảnh: vấn đề → ý tưởng → mô phỏng
+          từng bước → code chạy thật → tổng kết. Toàn bộ nội dung và dữ liệu
+          được ghi sẵn, không cần đăng nhập.
         </p>
-        <div className="hero-actions">
-          <Link href="/patterns/factory-method" className="btn btn-green">
-            Bắt đầu bài 01 →
-          </Link>
-          <Link href="/cheatsheet" className="btn">
-            Xem cheatsheet
-          </Link>
-        </div>
       </section>
 
-      {ORDER.map((cat, ci) => (
-        <section key={cat} id={cat} className="ov-group">
-          <header>
-            <span className={`dot cat-${cat}`} />
-            <h2>
-              {String(ci + 1).padStart(2, "0")}. {CATEGORY_INFO[cat].vi}
-            </h2>
-            <span className="muted">{CATEGORY_INFO[cat].label}</span>
-          </header>
-          <p className="muted ov-blurb">{CATEGORY_INFO[cat].blurb}</p>
-          <ul className="ov-grid">
-            {PATTERNS.map((p, i) =>
-              p.category !== cat ? null : (
-                <li key={p.slug}>
-                  <Link href={`/patterns/${p.slug}`} className="ov-card card">
-                    <div className="ov-thumb">
-                      <UmlDiagram
-                        diagram={p.diagram}
-                        id={`th-${p.slug}`}
-                        title={`Sơ đồ ${p.name}`}
-                        legend={false}
-                      />
-                    </div>
-                    <div className="ov-body">
-                      <div className="ov-meta">
-                        <span className="num">{number(i)}</span>
-                        <span className="chip chip-violet">
-                          {SEQUENCES[p.slug].steps.length + 4} bước
-                        </span>
-                      </div>
-                      <h3>{p.name}</h3>
-                      <p className="vi">{p.viName}</p>
-                      <p className="intent">{p.intent}</p>
-                    </div>
+      <ul className="course-grid">
+        {COURSE_LIST.map((c, i) => (
+          <li key={c.id}>
+            <article className="card course-card">
+              <Link
+                href={c.overview}
+                className="course-thumb"
+                aria-label={`Xem khoá ${c.title}`}
+              >
+                {previews[c.id]}
+              </Link>
+              <div className="course-body">
+                <p className="crumb">
+                  Khoá {String(i + 1).padStart(2, "0")} · {c.items.length} bài ·{" "}
+                  {c.languages}
+                </p>
+                <h2>
+                  <Link href={c.overview}>{c.title}</Link>
+                </h2>
+                <p className="subtitle">{c.tagline}</p>
+                <div className="pill-row left">
+                  {c.groups.map((g) => (
+                    <span key={g.id} className={`chip chip-cat cat-${g.id}`}>
+                      {g.label} ·{" "}
+                      {c.items.filter((it) => it.group === g.id).length}
+                    </span>
+                  ))}
+                </div>
+                <div className="hero-actions">
+                  <Link href={c.items[0].href} className="btn btn-green">
+                    Bắt đầu bài 01 →
                   </Link>
-                </li>
-              ),
-            )}
-          </ul>
-        </section>
-      ))}
+                  <Link href={c.overview} className="btn">
+                    Tổng quan
+                  </Link>
+                </div>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

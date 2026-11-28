@@ -6,10 +6,10 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { buildLessonSteps, lessonMinutes, type LessonStep } from "@/lib/lesson";
-import { markDone } from "@/lib/progress";
 import type { ExampleCode, Pattern, Sequence } from "@/lib/types";
+import { useLessonController } from "@/lib/useLessonController";
 import { Code, Terminal } from "./Code";
 import {
   IconArrowLeft,
@@ -53,119 +53,31 @@ const BADGE_CLASS: Record<LessonStep["kind"], string> = {
 export function LessonPlayer(props: Props) {
   const { pattern: p, sequence: seq, example, prev, next } = props;
   const steps = useMemo(() => buildLessonSteps(p, seq), [p, seq]);
-  const last = steps.length - 1;
   const firstFlow = steps.findIndex((s) => s.kind === "flow");
 
-  const [step, setStep] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [playKey, setPlayKey] = useState(0);
   const [lang, setLang] = useState<"ts" | "java">("ts");
-  const [reduced, setReduced] = useState(false);
-  const [announce, setAnnounce] = useState("");
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const go = useCallback(
-    (to: number, fromUser = true) => {
-      const target = Math.max(0, Math.min(last, to));
-      setStep(target);
-      setPlayKey((k) => k + 1);
-      if (fromUser)
-        setAnnounce(
-          `Bước ${target + 1} / ${steps.length}: ${steps[target].label}`,
-        );
-    },
-    [last, steps],
+  const labels = useMemo(() => steps.map((s) => s.label), [steps]);
+  const holdMs = useCallback(
+    (i: number) => (steps[i].kind === "flow" ? HOLD_FLOW : HOLD_OTHER),
+    [steps],
   );
-
-  // Deep-link: ?step=N (1-based) mở thẳng một bước — chỉ nhận số nguyên hợp lệ
-  useEffect(() => {
-    const open = () => {
-      const raw = new URLSearchParams(window.location.search).get("step");
-      if (raw && /^\d+$/.test(raw)) {
-        const n = Number(raw) - 1;
-        if (n >= 0 && n <= last) setStep(n);
-      }
-    };
-    open();
-  }, [last]);
-
-  // Đánh dấu hoàn thành khi tới bước cuối
-  useEffect(() => {
-    if (step === last) markDone(p.slug);
-  }, [step, last, p.slug]);
-
-  // Reduced motion: khung tĩnh đầy đủ, ẩn điều khiển phát
-  useEffect(() => {
-    const mq = matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => {
-      setReduced(mq.matches);
-      if (mq.matches) setPlaying(false);
-    };
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
-  // Một chuỗi setTimeout duy nhất cho chế độ tự phát
-  useEffect(() => {
-    if (timer.current) clearTimeout(timer.current);
-    if (!playing || step >= last) return;
-    timer.current = setTimeout(
-      () => {
-        go(step + 1, false);
-        // Dừng ngay khi tới bước cuối — không tự lặp lại
-        if (step + 1 >= last) setPlaying(false);
-      },
-      steps[step].kind === "flow" ? HOLD_FLOW : HOLD_OTHER,
-    );
-    return () => {
-      if (timer.current) clearTimeout(timer.current);
-    };
-  }, [playing, step, last, steps, go]);
-
-  // Tạm dừng khi tab bị ẩn
-  useEffect(() => {
-    const onHide = () =>
-      document.visibilityState === "hidden" && setPlaying(false);
-    document.addEventListener("visibilitychange", onHide);
-    return () => document.removeEventListener("visibilitychange", onHide);
-  }, []);
-
-  const replay = useCallback(() => {
-    go(firstFlow);
-    if (!reduced) setPlaying(true);
-  }, [firstFlow, go, reduced]);
-
-  // Phím tắt: ← → bước, Home/End, Space phát/dừng, R phát lại
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const t = e.target as HTMLElement;
-      if (t.closest("input, textarea, select, [contenteditable]")) return;
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        setPlaying(false);
-        go(step + 1);
-      } else if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        setPlaying(false);
-        go(step - 1);
-      } else if (e.key === "Home") {
-        e.preventDefault();
-        go(0);
-      } else if (e.key === "End") {
-        e.preventDefault();
-        go(last);
-      } else if (e.key === " " && !t.closest("button, a")) {
-        e.preventDefault();
-        if (!reduced) setPlaying((v) => !v);
-      } else if (e.key.toLowerCase() === "r") {
-        replay();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [go, last, replay, reduced, step]);
+  const {
+    step,
+    last,
+    go,
+    playing,
+    setPlaying,
+    togglePlay,
+    playKey,
+    reduced,
+    announce,
+    replay,
+  } = useLessonController({
+    labels,
+    holdMs,
+    replayFrom: firstFlow,
+    progressKey: p.slug,
+  });
 
   const cur = steps[step];
   const flowIndex = cur.kind === "flow" ? cur.index : null;
@@ -238,10 +150,7 @@ export function LessonPlayer(props: Props) {
                   className="btn"
                   data-motion-action={playing ? "pause" : "play"}
                   aria-pressed={playing}
-                  onClick={() => {
-                    if (!playing && step === last) go(firstFlow);
-                    setPlaying((v) => !v);
-                  }}
+                  onClick={togglePlay}
                 >
                   {playing ? <IconPause size={13} /> : <IconPlay size={13} />}
                   {playing ? "Tạm dừng" : "Tự chạy"}

@@ -59,18 +59,23 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4ebe0" },
-    { media: "(prefers-color-scheme: dark)", color: "#191714" },
-  ],
+  // Giao diện tối là mặc định
+  themeColor: "#191714",
+  colorScheme: "dark light",
 };
 
-// Áp theme đã lưu trước lần paint đầu tiên để không bị nháy.
+// Mặc định là giao diện tối (render sẵn data-theme="dark"); script áp lựa chọn đã lưu
+// trước lần paint đầu tiên để không bị nháy.
 const themeScript = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="vi" suppressHydrationWarning className={mono.variable}>
+    <html
+      lang="vi"
+      data-theme="dark"
+      suppressHydrationWarning
+      className={mono.variable}
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
@@ -79,7 +84,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Link href="/" className="brand">
             <Logo />
             <span>
-              Design <mark>Patterns</mark>
+              Học <mark>trực quan</mark>
             </span>
           </Link>
           <HeaderTabs />
@@ -87,8 +92,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <SearchBox />
             <ThemeToggle />
             <span className="made-by">
-              <small>23 mẫu GoF</small>
-              <b>TS · Java</b>
+              <small>2 khoá · 34 bài</small>
+              <b>TS · Java · Py</b>
             </span>
           </div>
         </header>

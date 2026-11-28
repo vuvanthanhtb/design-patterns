@@ -16,24 +16,44 @@ const BUILTINS = new Set(
   ),
 );
 
+const PY_KEYWORDS = new Set(
+  "and as assert break class continue def del elif else except False finally for from global if import in is lambda None nonlocal not or pass raise return self True try while with yield".split(
+    " ",
+  ),
+);
+const PY_BUILTINS = new Set(
+  "print range len zip enumerate sum min max abs round int float str list dict set tuple isinstance np".split(
+    " ",
+  ),
+);
+// Python: comment "#…", chuỗi có tiền tố f/r/b, decorator "@…"
+const PY_TOKEN =
+  /(#[^\n]*|@\w+)|((?:[fFrRbB]{1,2})?"(?:\\.|[^"\\\n])*"|(?:[fFrRbB]{1,2})?'(?:\\.|[^'\\\n])*')|(\b\d[\d_]*(?:\.\d+)?(?:e-?\d+)?\b)|([A-Za-z_][\w]*)|(\s+)|([^\sA-Za-z_\d])/g;
+
+export type CodeLang = "ts" | "java" | "python";
+
 const TOKEN =
   /(\/\/[^\n]*|\/\*[\s\S]*?\*\/|@\w+)|(`(?:\\[\s\S]|[^`])*`|"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')|(\b\d[\d_]*(?:\.\d+)?\b)|([A-Za-z_$][\w$]*)|(\s+)|([^\sA-Za-z_$\d])/g;
 
 type Tok = { t: string; c?: string };
 
-function tokenize(src: string): Tok[] {
+function tokenize(src: string, lang: CodeLang): Tok[] {
   const out: Tok[] = [];
+  const py = lang === "python";
+  const re = py ? PY_TOKEN : TOKEN;
+  const kw = py ? PY_KEYWORDS : KEYWORDS;
+  const bi = py ? PY_BUILTINS : BUILTINS;
   let m: RegExpExecArray | null;
-  TOKEN.lastIndex = 0;
-  while ((m = TOKEN.exec(src))) {
+  re.lastIndex = 0;
+  while ((m = re.exec(src))) {
     const [text, comment, str, num, ident] = m;
     if (comment) out.push({ t: text, c: "tk-comment" });
     else if (str) out.push({ t: text, c: "tk-string" });
     else if (num) out.push({ t: text, c: "tk-number" });
     else if (ident) {
-      const after = src.slice(TOKEN.lastIndex).match(/^\s*(\(|<[\w\s,]*>\()/);
-      if (KEYWORDS.has(text)) out.push({ t: text, c: "tk-keyword" });
-      else if (BUILTINS.has(text)) out.push({ t: text, c: "tk-builtin" });
+      const after = src.slice(re.lastIndex).match(/^\s*(\(|<[\w\s,]*>\()/);
+      if (kw.has(text)) out.push({ t: text, c: "tk-keyword" });
+      else if (bi.has(text)) out.push({ t: text, c: "tk-builtin" });
       else if (/^[A-Z]/.test(text)) out.push({ t: text, c: "tk-type" });
       else if (after) out.push({ t: text, c: "tk-fn" });
       else out.push({ t: text });
@@ -47,10 +67,12 @@ export function Code({
   code,
   filename,
   tabs,
+  lang = "ts",
 }: {
   code: string;
   filename: string;
   tabs?: React.ReactNode;
+  lang?: CodeLang;
 }) {
   const lines = code.split("\n");
   return (
@@ -67,7 +89,7 @@ export function Code({
               <span className="ln" aria-hidden>
                 {i + 1}
               </span>
-              {tokenize(line).map((tok, j) =>
+              {tokenize(line, lang).map((tok, j) =>
                 tok.c ? (
                   <span key={j} className={tok.c}>
                     {tok.t}
