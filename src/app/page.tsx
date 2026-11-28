@@ -6,17 +6,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
+import { ArchDiagram } from "@/components/arch/ArchDiagram";
 import { Plot } from "@/components/ml/Plot";
 import { UmlDiagram } from "@/components/UmlDiagram";
+import { ARCH_LESSONS } from "@/data/arch";
 import { COURSE_LIST } from "@/data/courses";
 import { PATTERNS } from "@/data/patterns";
 import { buildViz } from "@/lib/ml/viz";
-import { absoluteUrl, SITE } from "@/lib/site";
+import { ORGANIZATION, SITE, absoluteUrl, pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: { absolute: SITE.title },
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: SITE.title,
+  description: SITE.description,
+  path: "/",
+});
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -29,7 +32,9 @@ const structuredData = {
       description: SITE.description,
       inLanguage: SITE.language,
       author: { "@type": "Person", name: SITE.author },
+      publisher: { "@id": ORGANIZATION["@id"] },
     },
+    ORGANIZATION,
     {
       "@type": "ItemList",
       name: "Các khoá học",
@@ -52,6 +57,13 @@ export default function Home() {
         id="home-uml"
         title="Sơ đồ lớp Observer"
         legend={false}
+      />
+    ),
+    architecture: (
+      <ArchDiagram
+        diagram={ARCH_LESSONS.find((l) => l.slug === "event-driven")!.diagram}
+        id="home-arch"
+        title="Sơ đồ Event-Driven"
       />
     ),
     ml: (

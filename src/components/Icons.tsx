@@ -115,6 +115,16 @@ export const IconMenu = ({ size }: P) => (
     <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11" />
   </svg>
 );
+export const IconExpand = ({ size }: P) => (
+  <svg {...base(size)}>
+    <path d="M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5 9 7M2.5 13.5 7 9" />
+  </svg>
+);
+export const IconShrink = ({ size }: P) => (
+  <svg {...base(size)}>
+    <path d="M13.5 6.5h-4v-4M2.5 9.5h4v4M9.5 6.5 14 2M6.5 9.5 2 14" />
+  </svg>
+);
 export const IconCheck = ({ size }: P) => (
   <svg {...base(size)}>
     <path d="m3.5 8.5 3 3 6-7" />

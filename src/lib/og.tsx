@@ -36,6 +36,9 @@ const CAT_BG: Record<string, string> = {
   foundation: C.orange,
   supervised: C.green,
   unsupervised: C.violet,
+  "arch-app": C.green,
+  "arch-distributed": C.violet,
+  "arch-data": C.orange,
 };
 
 interface OgProps {

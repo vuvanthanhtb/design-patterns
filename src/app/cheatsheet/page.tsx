@@ -9,23 +9,16 @@ import { JsonLd } from "@/components/JsonLd";
 import { Rich } from "@/components/Rich";
 import { CATEGORY_INFO } from "@/data/meta";
 import { number, PATTERNS } from "@/data/patterns";
-import { absoluteUrl, OG_BASE } from "@/lib/site";
+import { absoluteUrl, breadcrumb, pageMetadata, SITE } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Cheatsheet 23 mẫu thiết kế GoF",
+export const metadata: Metadata = pageMetadata({
+  title: "Cheatsheet 23 mẫu thiết kế GoF · Học trực quan",
   description:
     "Bảng tra cứu nhanh 23 mẫu thiết kế GoF: ý định của từng mẫu, nhóm (Khởi tạo, Cấu trúc, Hành vi) và tín hiệu nhận biết khi nào nên dùng.",
-  alternates: { canonical: "/cheatsheet" },
-  openGraph: {
-    ...OG_BASE,
-    type: "website",
-    url: "/cheatsheet",
-    title: "Cheatsheet 23 mẫu thiết kế GoF",
-  },
-};
+  path: "/cheatsheet",
+});
 
-const structuredData = {
-  "@context": "https://schema.org",
+const mainEntity = {
   "@type": "ItemList",
   name: "23 mẫu thiết kế GoF",
   itemListElement: PATTERNS.map((p, i) => ({
@@ -34,6 +27,18 @@ const structuredData = {
     name: p.name,
     url: absoluteUrl(`/patterns/${p.slug}`),
   })),
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    mainEntity,
+    breadcrumb([
+      { name: SITE.name, path: "/" },
+      { name: "Design Patterns", path: "/patterns" },
+      { name: "Cheatsheet", path: "/cheatsheet" },
+    ]),
+  ],
 };
 
 export default function Cheatsheet() {

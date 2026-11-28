@@ -1,11 +1,31 @@
 # Học trực quan — Design Patterns & Machine Learning
 
-Hai khoá học tương tác bằng sơ đồ động:
+Ba khoá học tương tác bằng sơ đồ động:
 
-| Khoá                            | Bài | Ngôn ngữ                      | Biểu đồ động                                             |
-| ------------------------------- | --- | ----------------------------- | -------------------------------------------------------- |
-| `/patterns` — Design Patterns   | 23  | TypeScript, Java              | Sơ đồ lớp UML + sơ đồ tuần tự chạy từng thông điệp       |
-| `/ml` — Machine Learning cơ bản | 11  | Python (NumPy + scikit-learn) | Mô phỏng huấn luyện: đường hồi quy, vùng quyết định, cụm |
+| #   | Khoá                                    | Bài | Ngôn ngữ                      | Biểu đồ động                                                   |
+| --- | --------------------------------------- | --- | ----------------------------- | -------------------------------------------------------------- |
+| 01  | `/patterns` — Design Patterns           | 23  | TypeScript, Java              | Sơ đồ lớp UML + sơ đồ tuần tự chạy từng thông điệp             |
+| 02  | `/architecture` — Architecture Patterns | 14  | TypeScript, Java              | Sơ đồ hệ thống: request, sự kiện, lỗi chạy qua từng thành phần |
+| 03  | `/ml` — Machine Learning cơ bản         | 11  | Python (NumPy + scikit-learn) | Mô phỏng huấn luyện: đường hồi quy, vùng quyết định, cụm       |
+
+Mọi sơ đồ có bản 2D (mặc định) và bản 3D (sa bàn isometric hoặc WebGL) bật bằng công tắc trên sân khấu.
+Nút **phóng to** (phím `F`, `Esc` để thoát) ẩn sidebar và cột lời giải để hình minh hoạ chiếm toàn bộ chiều rộng.
+
+## Khoá Architecture Patterns
+
+Cấu trúc ứng dụng: Layered · MVC · Hexagonal · Clean Architecture.
+Hệ phân tán: Microservices · API Gateway · Event-Driven · Service Mesh / Sidecar · Serverless.
+Dữ liệu & vận hành: CQRS · Event Sourcing · Saga · Circuit Breaker · Strangler Fig.
+
+- Mỗi bài: Vấn đề → Cấu trúc → các bước **luồng chạy** (gói tin chạy dọc đường nối theo CSS Motion Path,
+  màu theo loại: gọi / trả về / sự kiện / lỗi / bù trừ; huy hiệu trạng thái như `OPEN`, `v3`, `75% mới`) → Code → Tổng kết.
+- Code TypeScript + Java mô phỏng mạng và đồng hồ trong một tiến trình, nên output luôn tất định.
+
+```
+src/data/arch/{app,distributed,data}.ts   nội dung + sơ đồ + luồng chạy của 14 bài
+src/data/arch/code/*.ts                   code TS + Java + output đã chạy thật
+src/components/arch/                      ArchDiagram (2D) · ArchIsometric (sa bàn 3D) · ArchLessonPlayer
+```
 
 ## Chế độ 3D
 
@@ -16,7 +36,7 @@ Hai khoá học tương tác bằng sơ đồ động:
   và được tính sẵn lúc build (`src/lib/ml/viz3d.ts`).
 - **Sa bàn UML isometric** (CSS 3D, `src/components/UmlIsometric.tsx`): mỗi lớp là một khối nổi trên sàn,
   quan hệ vẽ dưới sàn, lớp trọng tâm được nâng cao.
-- Công tắc **2D / 3D** trên sân khấu; lựa chọn được nhớ trong trình duyệt. Mặc định 3D.
+- Công tắc **2D / 3D** trên sân khấu. Mặc định luôn là 2D khi vào bài.
 - Three.js (~520 KB) chỉ tải khi biểu đồ 3D xuất hiện lần đầu; trình duyệt không có WebGL tự dùng bản 2D.
   `prefers-reduced-motion` tắt nội suy và tự xoay.
 
@@ -61,7 +81,7 @@ Mỗi mẫu là một bài học:
 ```bash
 npm install
 npm run dev               # http://localhost:3000
-npm run verify:examples   # (tuỳ chọn) chạy lại 23 ví dụ TS + Java và 11 ví dụ Python, so với output đã lưu
+npm run verify:examples   # (tuỳ chọn) chạy lại 37 ví dụ TS + Java và 11 ví dụ Python, so với output đã lưu
 ```
 
 Phím tắt trong bài học: `←` `→` chuyển bước · `Space` tự chạy/tạm dừng · `R` phát lại · `Home`/`End` ·
@@ -84,21 +104,24 @@ docker compose down
 
 ## SEO
 
-Đặt domain thật **lúc build** (các trang được prerender tĩnh nên URL tuyệt đối được ghi vào HTML):
+Đặt domain thật **lúc build** (các trang được prerender tĩnh nên URL tuyệt đối được ghi vào HTML khi build):
 
 ```bash
 SITE_URL=https://your-domain.com npm run build
 SITE_URL=https://your-domain.com docker compose up -d --build
 ```
 
-- Metadata đầy đủ cho từng trang: `title`, `description`, `keywords`, canonical, Open Graph, Twitter card,
-  `robots`, `theme-color` (`src/lib/site.ts` là cấu hình chung).
-- Ảnh chia sẻ 1200×630 sinh bằng code theo giao diện của trang: `/opengraph-image` và
-  `/patterns/<slug>/opengraph-image` (23 ảnh render sẵn lúc build; font JetBrains Mono có dấu tiếng Việt
-  nằm trong `src/assets/fonts`, giấy phép OFL).
-- `sitemap.xml` (25 URL + ảnh), `robots.txt`, `manifest.webmanifest`, `icon.svg`.
-- JSON-LD schema.org: `WebSite` + `Course` (trang chủ), `ItemList` (cheatsheet),
-  `LearningResource` + `BreadcrumbList` (mỗi bài học).
+- `src/lib/site.ts` là nguồn duy nhất: `pageMetadata()` sinh title, description, canonical, Open Graph và Twitter
+  **đồng bộ** cho mọi trang; `fitTitle()` giữ title ≤ 65 ký tự, `fitDescription()` giữ description ≤ 160 ký tự.
+  Ngày cập nhật nội dung ở `SITE.updated` (dùng cho sitemap `lastmod` và `dateModified`).
+- Ảnh chia sẻ 1200×630 sinh bằng code cho trang chủ, 3 trang tổng quan, 3 cheatsheet và từng bài
+  (48 ảnh `/<khoá>/<slug>/og.png`, render sẵn lúc build, mỗi ảnh có `og:image:alt` riêng),
+  font JetBrains Mono có dấu tiếng Việt nằm trong `src/assets/fonts` (giấy phép OFL).
+- `sitemap.xml` (55 URL, có `lastmod` và ảnh), `robots.txt`, `manifest.webmanifest`, `icon.svg`.
+- JSON-LD schema.org: `WebSite` + `Organization` + danh sách khoá (trang chủ), `Course` với `provider` là
+  Organization (3 trang tổng quan), `ItemList` (cheatsheet), `LearningResource` (từng bài) — mọi trang con đều có
+  `BreadcrumbList`; mỗi bài thêm `SoftwareSourceCode` cho code TypeScript / Java / Python.
+- `hreflang` vi-VN và x-default trên mọi trang.
 
 ## Dữ liệu
 

@@ -332,7 +332,7 @@ kbd {
 /* ───────────── Shell ───────────── */
 .shell {
   display: grid;
-  grid-template-columns: 252px minmax(0, 1fr);
+  grid-template-columns: 320px minmax(0, 1fr);
   min-height: calc(100dvh - 52px);
 }
 .content {
@@ -459,7 +459,7 @@ kbd {
 /* ───────────── Lesson ───────────── */
 .lesson {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 312px;
+  grid-template-columns: minmax(0, 1fr) 296px;
   gap: 0.9rem;
   min-height: calc(100dvh - 52px - 1.8rem);
 }
@@ -510,7 +510,7 @@ kbd {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 460px;
+  min-height: 520px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background-color: var(--sheet);
@@ -559,13 +559,13 @@ kbd {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1.25rem 1rem;
+  padding: 0.25rem 0.6rem 0.75rem;
   min-height: 0;
   overflow: auto;
 }
 .diagram-wrap {
   width: 100%;
-  max-width: 920px;
+  max-width: none;
   animation: fade-up 0.35s ease;
 }
 .diagram-wrap .uml,
@@ -665,7 +665,7 @@ kbd {
 /* Code trong sân khấu */
 .code-stage {
   width: 100%;
-  max-width: 920px;
+  max-width: none;
   align-self: stretch;
   animation: fade-up 0.35s ease;
 }
@@ -1578,7 +1578,7 @@ kbd {
 /* ───────────── Biểu đồ ML ───────────── */
 .plot-wrap {
   width: 100%;
-  max-width: 760px;
+  max-width: 1040px;
   animation: fade-up 0.35s ease;
 }
 .plot {
@@ -1846,9 +1846,9 @@ kbd {
 .scene3d {
   position: relative;
   width: 100%;
-  max-width: 900px;
+  max-width: none;
   align-self: stretch;
-  min-height: 440px;
+  min-height: 620px;
   border: 1px solid var(--line);
   border-radius: 12px;
   overflow: hidden;
@@ -1923,8 +1923,8 @@ kbd {
 .iso {
   position: relative;
   width: 100%;
-  max-width: 940px;
-  height: 480px;
+  max-width: none;
+  height: 620px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -2116,12 +2116,12 @@ kbd {
 }
 .iso-hero {
   position: relative;
-  height: 270px;
+  height: 330px;
 }
 .iso-hero-stage {
   position: absolute;
   left: 50%;
-  top: 70%;
+  top: 78%;
   width: 260px;
   height: 150px;
   transform-style: preserve-3d;
@@ -2139,10 +2139,16 @@ kbd {
   --z: 0px;
 }
 .slab-1 {
-  --z: 120px;
+  --z: 105px;
   --c: var(--green);
   inset: 14px 26px 14px 26px;
   animation-delay: -2.5s;
+}
+.slab-2 {
+  --z: 210px;
+  --c: var(--orange);
+  inset: 28px 52px 28px 52px;
+  animation-delay: -1.2s;
 }
 @keyframes slab-float {
   0%,
@@ -2243,5 +2249,470 @@ kbd {
   .ov-card:hover .ov-thumb > svg,
   .course-card:hover .course-thumb > svg {
     transform: none;
+  }
+}
+
+/* ───────────── Sơ đồ kiến trúc ───────────── */
+.chip-cat.cat-arch-app {
+  background: var(--green);
+}
+.chip-cat.cat-arch-distributed {
+  background: var(--violet);
+}
+.chip-cat.cat-arch-data {
+  background: var(--orange);
+}
+.dot.cat-arch-app {
+  background: var(--cat-arch-app);
+}
+.dot.cat-arch-distributed {
+  background: var(--cat-arch-distributed);
+}
+.dot.cat-arch-data {
+  background: var(--cat-arch-data);
+}
+
+.arch {
+  width: 100%;
+  height: auto;
+  display: block;
+  font-family: var(--font);
+}
+.arch .zone rect {
+  fill: color-mix(in srgb, var(--card-2) 70%, transparent);
+  stroke: var(--line-strong);
+  stroke-dasharray: 5 4;
+}
+.arch .zone text {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  fill: var(--muted-2);
+}
+.arch .edge path {
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  transition:
+    stroke 0.3s ease,
+    stroke-width 0.3s ease;
+}
+.arch .edge-sync path {
+  stroke: var(--ink-2);
+}
+.arch .edge-async path {
+  stroke: var(--hop-event);
+  stroke-dasharray: 6 5;
+}
+.arch .edge-data path {
+  stroke: var(--muted);
+}
+.arch .edge-control path {
+  stroke: var(--muted-2);
+  stroke-dasharray: 2 4;
+}
+.arch .edge.on path {
+  stroke-width: 2.6;
+}
+.arch .edge.hop-request path {
+  stroke: var(--hop-request);
+}
+.arch .edge.hop-response path {
+  stroke: var(--hop-response);
+}
+.arch .edge.hop-event path {
+  stroke: var(--hop-event);
+}
+.arch .edge.hop-fail path {
+  stroke: var(--hop-fail);
+}
+.arch .edge.hop-compensate path {
+  stroke: var(--hop-compensate);
+  stroke-dasharray: 6 4;
+}
+.arch .am-sync {
+  fill: var(--ink-2);
+}
+.arch .am-async,
+.arch .am-event {
+  fill: var(--hop-event);
+}
+.arch .am-data,
+.arch .am-control {
+  fill: var(--muted);
+}
+.arch .am-request {
+  fill: var(--hop-request);
+}
+.arch .am-response {
+  fill: var(--hop-response);
+}
+.arch .am-fail {
+  fill: var(--hop-fail);
+}
+.arch .am-compensate {
+  fill: var(--hop-compensate);
+}
+.arch .edge-label rect {
+  fill: var(--sheet);
+  stroke: var(--line);
+}
+.arch .edge-label text {
+  font-size: 9px;
+  fill: var(--muted);
+}
+
+.arch .node .shadow {
+  fill: var(--drop);
+}
+.arch .node .body {
+  fill: var(--node);
+  stroke: var(--ink);
+  stroke-width: 1.4;
+  transition:
+    fill 0.3s ease,
+    opacity 0.3s ease;
+}
+.arch .node.focal .body {
+  fill: #fdeedd;
+  stroke: var(--rust);
+}
+:root[data-theme="dark"] .arch .node.focal .body {
+  fill: #3a2a1f;
+}
+.arch .node.k-client .body {
+  fill: var(--card-2);
+  stroke-dasharray: 5 3;
+}
+.arch .node.k-client .shadow {
+  display: none;
+}
+.arch .node.on .body {
+  fill: var(--green);
+}
+.arch .node.down .body {
+  fill: color-mix(in srgb, var(--hop-fail) 14%, var(--node));
+  stroke: var(--hop-fail);
+  stroke-dasharray: 5 3;
+}
+.arch .node.ghost {
+  opacity: 0.28;
+}
+.arch .node .label {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.arch .node .sub {
+  font-size: 9.5px;
+  fill: var(--muted);
+}
+.arch .ico {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+.arch .node.focal .ico {
+  stroke: var(--rust);
+}
+.arch .ico-text {
+  font-size: 17px;
+  font-weight: 800;
+  fill: var(--ink-2);
+}
+.arch .down-tag {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  fill: var(--hop-fail);
+}
+.arch .badge rect {
+  fill: var(--ink);
+}
+.arch .badge text {
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--paper);
+}
+
+/* Gói tin chạy dọc đường nối */
+.arch .packet {
+  offset-rotate: 0deg;
+  opacity: 0;
+  stroke: var(--node);
+  stroke-width: 2;
+  animation: packet-move 0.9s cubic-bezier(0.45, 0.05, 0.35, 1) both;
+}
+@keyframes packet-move {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+.arch .hop-label {
+  opacity: 0;
+  animation: hop-label-in 0.35s ease both;
+}
+@keyframes hop-label-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.arch .hop-label rect {
+  stroke-width: 1.4;
+  fill: var(--sheet);
+}
+.arch .hop-label text {
+  font-size: 10px;
+  font-weight: 700;
+}
+.arch .hop-request .packet {
+  fill: var(--hop-request);
+}
+.arch .hop-request .hop-label rect {
+  stroke: var(--hop-request);
+}
+.arch .hop-request .hop-label text {
+  fill: var(--hop-request);
+}
+.arch .hop-response .packet {
+  fill: var(--hop-response);
+}
+.arch .hop-response .hop-label rect {
+  stroke: var(--hop-response);
+}
+.arch .hop-response .hop-label text {
+  fill: var(--hop-response);
+}
+.arch .hop-event .packet {
+  fill: var(--hop-event);
+}
+.arch .hop-event .hop-label rect {
+  stroke: var(--hop-event);
+}
+.arch .hop-event .hop-label text {
+  fill: var(--hop-event);
+}
+.arch .hop-fail .packet {
+  fill: var(--hop-fail);
+}
+.arch .hop-fail .hop-label rect {
+  stroke: var(--hop-fail);
+}
+.arch .hop-fail .hop-label text {
+  fill: var(--hop-fail);
+}
+.arch .hop-compensate .packet {
+  fill: var(--hop-compensate);
+}
+.arch .hop-compensate .hop-label rect {
+  stroke: var(--hop-compensate);
+}
+.arch .hop-compensate .hop-label text {
+  fill: var(--hop-compensate);
+}
+@supports not (offset-path: path("M0 0")) {
+  .arch .packet {
+    display: none;
+  }
+}
+
+/* Chú giải loại gói tin */
+.pk {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--node);
+  box-shadow: 0 0 0 1px var(--line-strong);
+  vertical-align: -1px;
+  flex: none;
+}
+.pk-request {
+  background: var(--hop-request);
+}
+.pk-response {
+  background: var(--hop-response);
+}
+.pk-event {
+  background: var(--hop-event);
+}
+.pk-fail {
+  background: var(--hop-fail);
+}
+.pk-compensate {
+  background: var(--hop-compensate);
+}
+.hop-list {
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+}
+.hop-list li {
+  display: grid;
+  grid-template-columns: 12px 1fr;
+  gap: 0.15rem 0.5rem;
+  align-items: center;
+}
+.hop-list code {
+  grid-column: 2;
+  justify-self: start;
+}
+
+/* Khối sa bàn của sơ đồ kiến trúc */
+.iso-arch .arch-top {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+.iso-arch .arch-top svg {
+  flex: none;
+}
+.iso-arch .arch-top svg .ico {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.4;
+}
+.iso-arch .arch-top svg .ico-text {
+  font-size: 17px;
+  font-weight: 800;
+  fill: var(--ink-2);
+}
+.iso-arch .arch-top span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+.iso-arch .arch-top b {
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.25;
+  text-align: left;
+  background: none !important;
+}
+.iso-arch .arch-top small {
+  font-size: 9.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.iso-arch .iso-block.lit {
+  --top: var(--green);
+  transform: translateZ(14px);
+}
+.iso-arch .iso-block.down {
+  --top: color-mix(in srgb, var(--hop-fail) 14%, var(--node));
+  --edge: var(--hop-fail);
+}
+.iso-arch .iso-block.ghost {
+  opacity: 0.25;
+}
+.iso-arch .iso-block.ak-client .iso-top {
+  border-style: dashed;
+}
+.iso-badge {
+  position: absolute;
+  top: -10px;
+  right: -6px;
+  z-index: 2;
+  transform: translateZ(calc(var(--d) + 2px));
+  padding: 1px 8px;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--paper);
+  background: var(--ink);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.iso-arch .iso-floor .arch .zone rect {
+  fill: color-mix(in srgb, var(--card-2) 85%, transparent);
+}
+
+/* Khung minh hoạ lấp đầy sân khấu; sơ đồ SVG không phóng quá 1.4 lần kích thước gốc */
+.diagram-wrap > svg {
+  max-height: 78vh;
+  margin: 0 auto;
+}
+
+/* Sidebar: tên bài / nhóm / khoá luôn trên một dòng (cắt bằng … nếu quá hẹp) */
+.tree-item,
+.tree-group .tree-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.tree-item {
+  display: flex;
+}
+.tree-group .tree-title {
+  flex: 1;
+}
+.tree-item .file {
+  flex: none;
+}
+@media (max-width: 1280px) {
+  .shell {
+    grid-template-columns: 290px minmax(0, 1fr);
+  }
+}
+
+/* ───────────── Phóng to khung minh hoạ (phím F) ───────────── */
+.btn-icon {
+  width: 34px;
+  padding: 0;
+}
+.btn-icon[aria-pressed="true"] {
+  background: var(--green);
+}
+:root[data-stage="wide"] .shell {
+  grid-template-columns: minmax(0, 1fr);
+}
+:root[data-stage="wide"] .sidebar {
+  display: none;
+}
+:root[data-stage="wide"] .content {
+  padding-left: 0.9rem;
+}
+.lesson.wide {
+  grid-template-columns: minmax(0, 1fr);
+}
+.lesson.wide .lesson-side {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 0.9rem;
+}
+.lesson.wide .diagram-wrap > svg {
+  max-height: 82vh;
+}
+.lesson.wide .scene3d {
+  min-height: 72vh;
+}
+.lesson.wide .iso {
+  height: 74vh;
+}
+.lesson.wide .plot-wrap {
+  max-width: min(100%, 118vh);
+}
+@media (max-width: 900px) {
+  .lesson.wide .lesson-side {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

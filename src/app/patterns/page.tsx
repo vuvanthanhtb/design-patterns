@@ -10,31 +10,29 @@ import { UmlDiagram } from "@/components/UmlDiagram";
 import { CATEGORY_INFO } from "@/data/meta";
 import { number, PATTERNS } from "@/data/patterns";
 import { SEQUENCES } from "@/data/sequences";
-import { absoluteUrl, OG_BASE, SITE } from "@/lib/site";
+import {
+  ORGANIZATION,
+  SITE,
+  absoluteUrl,
+  breadcrumb,
+  pageMetadata,
+} from "@/lib/site";
 import type { Category } from "@/lib/types";
 
 const ORDER: Category[] = ["creational", "structural", "behavioral"];
 
-const COURSE_TITLE = "Design Patterns — 23 mẫu thiết kế GoF";
+const COURSE_TITLE = "Design Patterns: 23 mẫu thiết kế GoF qua sơ đồ động";
 const COURSE_DESC =
   "Khoá học tương tác 23 mẫu thiết kế GoF: sơ đồ lớp UML, sơ đồ tuần tự động từng bước, ví dụ TypeScript và Java chạy được kèm output thật.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: COURSE_TITLE,
   description: COURSE_DESC,
-  alternates: { canonical: "/patterns" },
-  openGraph: {
-    ...OG_BASE,
-    type: "website",
-    url: "/patterns",
-    title: COURSE_TITLE,
-    description: COURSE_DESC,
-  },
-};
+  path: "/patterns",
+});
 
 /** schema.org: khoá học gồm 23 bài (mỗi bài là một LearningResource). */
-const structuredData = {
-  "@context": "https://schema.org",
+const mainEntity = {
   "@type": "Course",
   "@id": absoluteUrl("/patterns#course"),
   name: COURSE_TITLE,
@@ -44,7 +42,7 @@ const structuredData = {
   isAccessibleForFree: true,
   educationalLevel: "Intermediate",
   teaches: "23 mẫu thiết kế GoF với TypeScript và Java",
-  provider: { "@type": "Person", name: SITE.author },
+  provider: ORGANIZATION,
   hasCourseInstance: {
     "@type": "CourseInstance",
     courseMode: "online",
@@ -61,6 +59,17 @@ const structuredData = {
     name: `${p.name} — ${p.viName}`,
     url: absoluteUrl(`/patterns/${p.slug}`),
   })),
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    mainEntity,
+    breadcrumb([
+      { name: SITE.name, path: "/" },
+      { name: "Design Patterns", path: "/patterns" },
+    ]),
+  ],
 };
 
 export default function Overview() {

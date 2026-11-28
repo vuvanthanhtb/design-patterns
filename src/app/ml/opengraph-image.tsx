@@ -12,7 +12,7 @@ export const contentType = "image/png";
 
 export default function Image() {
   return renderOg({
-    eyebrow: "Khoá học 02 · 11 bài",
+    eyebrow: "Khoá học 03 · 11 bài",
     title: "Machine Learning cơ bản",
     subtitle:
       "Mô phỏng từng bước · cài đặt từ đầu bằng NumPy · đối chiếu scikit-learn",

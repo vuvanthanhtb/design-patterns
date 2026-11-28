@@ -4,23 +4,18 @@
  */
 
 import { getMlLesson, ML_GROUPS, ML_LESSONS } from "@/data/ml";
-import { OG_SIZE, renderOg } from "@/lib/og";
+import { renderOg } from "@/lib/og";
 import { buildViz } from "@/lib/ml/viz";
 
-export const alt = "Bài học thuật toán Machine Learning";
-export const size = OG_SIZE;
-export const contentType = "image/png";
-
-// Render sẵn ảnh cho cả 11 bài lúc build
+// Ảnh chia sẻ 1200×630 — route handler + generateStaticParams nên được render sẵn cho cả 11 bài lúc build
 export function generateStaticParams() {
   return ML_LESSONS.map((l) => ({ slug: l.slug }));
 }
 
-export default async function Image({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
   const { slug } = await params;
   const found = getMlLesson(slug);
   if (!found)

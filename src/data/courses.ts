@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { ARCH_GROUPS, ARCH_LESSONS } from "./arch";
 import { CATEGORY_INFO } from "./meta";
 import { ML_GROUPS, ML_LESSONS } from "./ml/lessons";
 import { NAV_INDEX } from "./nav";
 
 /** Sổ đăng ký các khoá học — dùng cho sidebar, header, tìm kiếm, sitemap. */
-export type CourseId = "patterns" | "ml";
+export type CourseId = "patterns" | "architecture" | "ml";
 
 export interface CourseItem {
   slug: string;
@@ -61,6 +62,31 @@ export const COURSES: Record<CourseId, Course> = {
       progressKey: p.slug,
     })),
   },
+  architecture: {
+    id: "architecture",
+    title: "Architecture Patterns",
+    short: "Mẫu kiến trúc",
+    tagline:
+      "14 mẫu kiến trúc phần mềm qua sơ đồ hệ thống có luồng dữ liệu động.",
+    overview: "/architecture",
+    cheatsheet: "/architecture/cheatsheet",
+    languages: "TypeScript · Java",
+    groups: (["app", "distributed", "data"] as const).map((g) => ({
+      id: `arch-${g}`,
+      label: ARCH_GROUPS[g].vi,
+      color: `var(--cat-arch-${g})`,
+    })),
+    items: ARCH_LESSONS.map((l, i) => ({
+      slug: l.slug,
+      name: l.name,
+      viName: l.viName,
+      group: `arch-${l.group}`,
+      intent: l.intent,
+      num: String(i + 1).padStart(2, "0"),
+      href: `/architecture/${l.slug}`,
+      progressKey: `arch:${l.slug}`,
+    })),
+  },
   ml: {
     id: "ml",
     title: "Machine Learning",
@@ -89,17 +115,19 @@ export const COURSES: Record<CourseId, Course> = {
   },
 };
 
-export const COURSE_LIST = [COURSES.patterns, COURSES.ml];
+/** Thứ tự hiển thị: 01 Design Patterns · 02 Architecture Patterns · 03 Machine Learning. */
+export const COURSE_LIST = [COURSES.patterns, COURSES.architecture, COURSES.ml];
 
 /** Khoá học ứng với đường dẫn hiện tại (mặc định: Design Patterns). */
 export function courseFromPath(path: string): Course {
-  return path === "/ml" || path.startsWith("/ml/")
-    ? COURSES.ml
-    : COURSES.patterns;
+  const seg = path.split("/")[1];
+  if (seg === "ml") return COURSES.ml;
+  if (seg === "architecture") return COURSES.architecture;
+  return COURSES.patterns;
 }
 
 /** Slug bài học đang mở, nếu có. */
 export function lessonFromPath(path: string): string | null {
-  const m = path.match(/^\/(?:patterns|ml)\/([^/]+)$/);
+  const m = path.match(/^\/(?:patterns|architecture|ml)\/([^/]+)$/);
   return m && m[1] !== "cheatsheet" ? m[1] : null;
 }

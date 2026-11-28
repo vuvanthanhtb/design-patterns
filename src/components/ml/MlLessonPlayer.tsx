@@ -10,9 +10,12 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { MlLesson, PythonExample, Viz, Viz3D } from "@/lib/ml/types";
 import { useLessonController } from "@/lib/useLessonController";
+import { useWideStage } from "@/lib/useWideStage";
 import { Code, Terminal } from "../Code";
 import {
   IconArrowLeft,
+  IconExpand,
+  IconShrink,
   IconArrowRight,
   IconClock,
   IconLayers,
@@ -32,8 +35,6 @@ const Scene3D = dynamic(() => import("./Scene3D"), {
     <div className="scene3d scene3d-loading">Đang tải cảnh 3D…</div>
   ),
 });
-
-const VIEW_KEY = "ml-view";
 
 function webglSupported() {
   try {
@@ -119,33 +120,16 @@ export function MlLessonPlayer({
     replayFrom: firstSim,
     progressKey: `ml:${l.slug}`,
   });
+  const { wide, toggle: toggleWide } = useWideStage();
 
-  // Chế độ xem: SSR luôn là 2D (khung tĩnh đầy đủ); sau khi mount chuyển sang lựa chọn
-  // đã lưu — mặc định 3D nếu bài có cảnh 3D và trình duyệt hỗ trợ WebGL.
+  // Mặc định luôn là 2D khi vào bài; chỉ kiểm tra WebGL để biết có hiện công tắc 3D
   const [view, setView] = useState<"2d" | "3d">("2d");
   const [webgl, setWebgl] = useState(false);
   useEffect(() => {
-    const init = () => {
-      const ok = webglSupported();
-      setWebgl(ok);
-      let saved: string | null = null;
-      try {
-        saved = localStorage.getItem(VIEW_KEY);
-      } catch {
-        /* storage không khả dụng */
-      }
-      if (ok && viz3d && saved !== "2d") setView("3d");
-    };
+    const init = () => setWebgl(webglSupported());
     init();
-  }, [viz3d]);
-  const chooseView = (v: "2d" | "3d") => {
-    setView(v);
-    try {
-      localStorage.setItem(VIEW_KEY, v);
-    } catch {
-      /* storage không khả dụng */
-    }
-  };
+  }, []);
+  const chooseView = (v: "2d" | "3d") => setView(v);
   const fallback2d = useCallback(() => {
     setWebgl(false);
     setView("2d");
@@ -174,7 +158,7 @@ export function MlLessonPlayer({
 
   return (
     <div
-      className="lesson"
+      className={`lesson${wide ? " wide" : ""}`}
       data-motion-root
       data-motion-mode="step"
       data-step-count={steps.length}
@@ -237,6 +221,20 @@ export function MlLessonPlayer({
                 ))}
               </div>
             )}
+            <button
+              type="button"
+              className="btn btn-icon"
+              aria-pressed={wide}
+              aria-label={
+                wide
+                  ? "Thu nhỏ khung minh hoạ (Esc)"
+                  : "Phóng to khung minh hoạ (F)"
+              }
+              title={wide ? "Thu nhỏ (Esc)" : "Phóng to (F)"}
+              onClick={toggleWide}
+            >
+              {wide ? <IconShrink size={14} /> : <IconExpand size={14} />}
+            </button>
             {!reduced && (
               <div className="controls" data-motion-controls>
                 <button
@@ -511,7 +509,8 @@ export function MlLessonPlayer({
           </div>
           <p className="kbd-hints">
             <kbd>←</kbd>
-            <kbd>→</kbd> bước · <kbd>R</kbd> lại · <kbd>Space</kbd> chạy
+            <kbd>→</kbd> bước · <kbd>R</kbd> lại · <kbd>Space</kbd> chạy ·{" "}
+            <kbd>F</kbd> phóng to
           </p>
           <p
             role="status"

@@ -48,6 +48,34 @@ for (const file of readdirSync(dir)
     `${okTs ? "✓" : "✗"} ts  ${hasJava ? (okJava ? "✓" : "✗") : "-"} java  ${slug}`,
   );
 }
+// ── Khoá Architecture Patterns: TypeScript + Java (cùng định dạng với Design Patterns)
+const archDir = join(import.meta.dirname, "..", "src", "data", "arch", "code");
+for (const file of readdirSync(archDir)
+  .filter((f) => f.endsWith(".ts") && f !== "index.ts")
+  .sort()) {
+  const slug = file.slice(0, -3);
+  const mod = await import(pathToFileURL(join(archDir, file)).href);
+  const ex = Object.values(mod)[0];
+  const tsFile = join(tmp, `arch-${slug}.ts`);
+  writeFileSync(tsFile, ex.typescript + "\n\nexport {};\n");
+  const okTs =
+    execFileSync(process.execPath, ["--no-warnings", tsFile], {
+      encoding: "utf8",
+    }).trimEnd() === ex.tsOutput.join("\n");
+  let okJava = true;
+  if (hasJava) {
+    const javaFile = join(tmp, ex.javaFile);
+    writeFileSync(javaFile, ex.java + "\n");
+    okJava =
+      execFileSync("java", [javaFile], { encoding: "utf8" }).trimEnd() ===
+      ex.javaOutput.join("\n");
+  }
+  if (!okTs || !okJava) failed++;
+  console.log(
+    `${okTs ? "✓" : "✗"} ts  ${hasJava ? (okJava ? "✓" : "✗") : "-"} java  arch/${slug}`,
+  );
+}
+
 // ── Khoá Machine Learning: chạy lại code Python (cần python3 + numpy + scikit-learn)
 const mlDir = join(import.meta.dirname, "..", "src", "data", "ml", "code");
 let hasPython = true;

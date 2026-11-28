@@ -10,28 +10,26 @@ import { Plot } from "@/components/ml/Plot";
 import { ML_GROUPS, ML_LESSONS } from "@/data/ml";
 import { buildViz } from "@/lib/ml/viz";
 import type { MlGroup } from "@/lib/ml/types";
-import { absoluteUrl, OG_BASE, SITE } from "@/lib/site";
+import {
+  ORGANIZATION,
+  SITE,
+  absoluteUrl,
+  breadcrumb,
+  pageMetadata,
+} from "@/lib/site";
 
 const ORDER: MlGroup[] = ["foundation", "supervised", "unsupervised"];
-const TITLE = "Machine Learning cơ bản — 11 thuật toán nền tảng";
+const TITLE = "Machine Learning cơ bản: 11 thuật toán qua mô phỏng";
 const DESC =
-  "Khoá học tương tác 11 thuật toán học máy nền tảng: Gradient Descent, hồi quy, k-NN, Naive Bayes, cây quyết định, Random Forest, SVM, mạng nơ-ron, K-Means, PCA — biểu đồ mô phỏng từng bước và code Python chạy thật.";
+  "Khoá học 11 thuật toán học máy nền tảng: hồi quy, k-NN, cây quyết định, SVM, mạng nơ-ron, K-Means, PCA… mô phỏng từng bước, code Python chạy thật.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TITLE,
   description: DESC,
-  alternates: { canonical: "/ml" },
-  openGraph: {
-    ...OG_BASE,
-    type: "website",
-    url: "/ml",
-    title: TITLE,
-    description: DESC,
-  },
-};
+  path: "/ml",
+});
 
-const structuredData = {
-  "@context": "https://schema.org",
+const mainEntity = {
   "@type": "Course",
   "@id": absoluteUrl("/ml#course"),
   name: TITLE,
@@ -41,7 +39,7 @@ const structuredData = {
   isAccessibleForFree: true,
   educationalLevel: "Beginner",
   teaches: "Các thuật toán học máy cơ bản với Python, NumPy và scikit-learn",
-  provider: { "@type": "Person", name: SITE.author },
+  provider: ORGANIZATION,
   hasCourseInstance: {
     "@type": "CourseInstance",
     courseMode: "online",
@@ -60,13 +58,24 @@ const structuredData = {
   })),
 };
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    mainEntity,
+    breadcrumb([
+      { name: SITE.name, path: "/" },
+      { name: "Machine Learning", path: "/ml" },
+    ]),
+  ],
+};
+
 export default function MlOverview() {
   return (
     <div className="overview">
       <JsonLd data={structuredData} />
       <section className="card hero">
         <p className="crumb">
-          Khoá học 02 · {ML_LESSONS.length} bài · Python (NumPy + scikit-learn)
+          Khoá học 03 · {ML_LESSONS.length} bài · Python (NumPy + scikit-learn)
         </p>
         <h1>
           Học <mark>Machine Learning</mark> bằng mô phỏng

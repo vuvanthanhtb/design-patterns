@@ -8,25 +8,16 @@ import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { Rich } from "@/components/Rich";
 import { ML_GROUPS, ML_LESSONS } from "@/data/ml";
-import { absoluteUrl, OG_BASE } from "@/lib/site";
+import { absoluteUrl, breadcrumb, pageMetadata, SITE } from "@/lib/site";
 
-const TITLE = "Cheatsheet 11 thuật toán Machine Learning cơ bản";
-
-export const metadata: Metadata = {
-  title: TITLE,
+export const metadata: Metadata = pageMetadata({
+  title: "Cheatsheet 11 thuật toán Machine Learning · Học trực quan",
   description:
-    "Bảng tra cứu nhanh 11 thuật toán học máy cơ bản: loại bài toán, ý tưởng chính, lớp scikit-learn tương ứng, độ phức tạp và khi nào nên dùng.",
-  alternates: { canonical: "/ml/cheatsheet" },
-  openGraph: {
-    ...OG_BASE,
-    type: "website",
-    url: "/ml/cheatsheet",
-    title: TITLE,
-  },
-};
+    "Bảng tra cứu nhanh 11 thuật toán học máy cơ bản: loại bài toán, công thức cốt lõi, lớp scikit-learn tương ứng và khi nào nên dùng.",
+  path: "/ml/cheatsheet",
+});
 
-const structuredData = {
-  "@context": "https://schema.org",
+const mainEntity = {
   "@type": "ItemList",
   name: "11 thuật toán Machine Learning cơ bản",
   itemListElement: ML_LESSONS.map((l, i) => ({
@@ -35,6 +26,18 @@ const structuredData = {
     name: l.name,
     url: absoluteUrl(`/ml/${l.slug}`),
   })),
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    mainEntity,
+    breadcrumb([
+      { name: SITE.name, path: "/" },
+      { name: "Machine Learning", path: "/ml" },
+      { name: "Cheatsheet", path: "/ml/cheatsheet" },
+    ]),
+  ],
 };
 
 export default function MlCheatsheet() {

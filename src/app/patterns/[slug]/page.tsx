@@ -10,7 +10,15 @@ import { JsonLd } from "@/components/JsonLd";
 import { LessonPlayer } from "@/components/LessonPlayer";
 import { CATEGORY_INFO } from "@/data/meta";
 import { getPattern, PATTERNS } from "@/data/patterns";
-import { absoluteUrl, OG_BASE, SITE } from "@/lib/site";
+import {
+  absoluteUrl,
+  fitDescription,
+  fitTitle,
+  ORGANIZATION,
+  pageMetadata,
+  SITE,
+  codeSamples,
+} from "@/lib/site";
 
 const CAT_NUM = {
   creational: "01",
@@ -31,32 +39,31 @@ export async function generateMetadata({
   const found = getPattern(slug);
   if (!found) return { title: "Không tìm thấy", robots: { index: false } };
   const p = found.pattern;
-  const title = `${p.name} (${p.viName}) — mẫu thiết kế ${CATEGORY_INFO[p.category].label}`;
-  const description = `${p.intent} Sơ đồ UML động, ví dụ TypeScript và Java.`;
-  const path = `/patterns/${slug}`;
-  return {
-    title,
-    description,
+  return pageMetadata({
+    // "Tên (tên Việt) · Loại" — rút gọn khi vượt 65 ký tự
+    title: fitTitle([
+      `${p.name} (${p.viName}) · Design Pattern`,
+      `${p.name} · Design Pattern`,
+    ]),
+    description: fitDescription(
+      p.intent,
+      "Sơ đồ UML động, ví dụ TypeScript và Java.",
+    ),
+    path: `/patterns/${slug}`,
+    type: "article",
+    image: {
+      url: `/patterns/${slug}/og.png`,
+      alt: `${p.name} (${p.viName}) — mẫu thiết kế GoF · sơ đồ UML động, TypeScript và Java`,
+    },
+    section: "Design Patterns",
     keywords: [
       p.name,
       p.viName,
       `${p.name} pattern`,
       `${p.name} TypeScript`,
       `${p.name} Java`,
-      ...SITE.keywords,
     ],
-    alternates: { canonical: path },
-    openGraph: {
-      ...OG_BASE,
-      type: "article",
-      url: path,
-      title,
-      description,
-      section: CATEGORY_INFO[p.category].label,
-      authors: [SITE.author],
-    },
-    twitter: { card: "summary_large_image", title, description },
-  };
+  });
 }
 
 /**
@@ -83,13 +90,17 @@ async function Lesson({ params }: { params: Params }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
+      ...codeSamples(url, pattern.name, [
+        { language: "TypeScript", runtime: "Node.js 22+", file: `${slug}.ts` },
+        { language: "Java", runtime: "Java 21+", file: example.javaFile },
+      ]),
       {
         "@type": "LearningResource",
         "@id": `${url}#lesson`,
         name: `${pattern.name} — ${pattern.viName}`,
         description: pattern.intent,
         url,
-        image: absoluteUrl(`/patterns/${slug}/opengraph-image`),
+        image: absoluteUrl(`/patterns/${slug}/og.png`),
         inLanguage: SITE.language,
         learningResourceType: "Lesson",
         educationalLevel: "Intermediate",
@@ -100,6 +111,8 @@ async function Lesson({ params }: { params: Params }) {
           { "@type": "Thing", name: pattern.name },
         ],
         author: { "@type": "Person", name: SITE.author },
+        provider: ORGANIZATION,
+        dateModified: SITE.updated,
         isPartOf: {
           "@type": "Course",
           "@id": absoluteUrl("/patterns#course"),

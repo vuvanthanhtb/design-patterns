@@ -26,6 +26,8 @@ interface Props {
   highlight?: string[];
   /** false = chỉ vẽ "sàn" (quan hệ, nhãn, ghi chú) — dùng cho sa bàn 3D. */
   boxes?: boolean;
+  /** Cắt viewBox theo nội dung để hình phóng to tối đa (tắt khi làm sàn cho sa bàn 3D). */
+  crop?: boolean;
 }
 
 const LEGEND_H = 64;
@@ -38,6 +40,7 @@ export function UmlDiagram({
   className,
   highlight,
   boxes: drawBoxes = true,
+  crop = true,
 }: Props) {
   const lit = new Set(highlight ?? []);
   const boxes: Record<string, Box> = {};
@@ -46,10 +49,31 @@ export function UmlDiagram({
   const height = bodyH + (legend ? LEGEND_H : 0);
   const m = (name: string) => `${id}-${name}`;
 
+  // Khung nhìn: mặc định cắt sát nội dung (lớp, ghi chú, đường nối) + lề 24px
+  let vb = { x: 0, y: 0, w: diagram.width, h: height };
+  if (crop) {
+    const xs: number[] = [];
+    for (const b of Object.values(boxes)) xs.push(b.x, b.x + b.w);
+    for (const n of diagram.notes ?? []) xs.push(n.x, n.x + n.w);
+    for (const r of diagram.relations)
+      for (const [px] of route(r, boxes)) xs.push(px);
+    const minLegendW = legend ? 640 : 0;
+    let x0 = Math.max(0, Math.min(...xs) - 24);
+    let x1 = Math.min(diagram.width, Math.max(...xs) + 24);
+    if (x1 - x0 < minLegendW) {
+      const pad = (minLegendW - (x1 - x0)) / 2;
+      x0 -= pad;
+      x1 += pad;
+    }
+    // Chỉ cắt lề trái/phải: hình bị giới hạn theo chiều rộng nên đó là phần duy nhất
+    // làm nội dung to lên; giữ nguyên chiều dọc để khung không bị thấp đi.
+    vb = { x: x0, y: 0, w: x1 - x0, h: height };
+  }
+
   return (
     <svg
       className={`uml${lit.size ? " has-dim" : ""} ${className ?? ""}`}
-      viewBox={`0 0 ${diagram.width} ${height}`}
+      viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`}
       xmlns="http://www.w3.org/2000/svg"
       role="img"
       aria-label={title}
@@ -86,7 +110,7 @@ export function UmlDiagram({
         ))}
       </g>
 
-      {legend && <Legend y={bodyH} width={diagram.width} m={m} />}
+      {legend && <Legend y={bodyH} x0={vb.x} width={vb.w} m={m} />}
     </svg>
   );
 }
@@ -382,10 +406,12 @@ function Note({ note }: { note: UmlNote }) {
 
 function Legend({
   y,
+  x0 = 0,
   width,
   m,
 }: {
   y: number;
+  x0?: number;
   width: number;
   m: (s: string) => string;
 }) {
@@ -408,7 +434,7 @@ function Legend({
     ];
   const step = (width - 80) / items.length;
   return (
-    <g>
+    <g transform={`translate(${x0} 0)`}>
       <line
         x1={40}
         x2={width - 40}

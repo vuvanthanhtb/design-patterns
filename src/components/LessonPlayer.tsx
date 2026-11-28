@@ -6,13 +6,16 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { buildLessonSteps, lessonMinutes, type LessonStep } from "@/lib/lesson";
 import type { ExampleCode, Pattern, Sequence } from "@/lib/types";
 import { useLessonController } from "@/lib/useLessonController";
+import { useWideStage } from "@/lib/useWideStage";
 import { Code, Terminal } from "./Code";
 import {
   IconArrowLeft,
+  IconExpand,
+  IconShrink,
   IconArrowRight,
   IconClock,
   IconLayers,
@@ -79,27 +82,11 @@ export function LessonPlayer(props: Props) {
     replayFrom: firstFlow,
     progressKey: p.slug,
   });
+  const { wide, toggle: toggleWide } = useWideStage();
 
-  // Sơ đồ lớp: SSR là 2D; sau khi mount dùng lựa chọn đã lưu (mặc định sa bàn 3D)
+  // Mặc định luôn là 2D khi vào bài; công tắc chỉ đổi chế độ trong lần xem hiện tại
   const [view, setView] = useState<"2d" | "3d">("2d");
-  useEffect(() => {
-    const init = () => {
-      try {
-        if (localStorage.getItem("dp-view") !== "2d") setView("3d");
-      } catch {
-        setView("3d");
-      }
-    };
-    init();
-  }, []);
-  const chooseView = (v: "2d" | "3d") => {
-    setView(v);
-    try {
-      localStorage.setItem("dp-view", v);
-    } catch {
-      /* storage không khả dụng */
-    }
-  };
+  const chooseView = (v: "2d" | "3d") => setView(v);
 
   const cur = steps[step];
   const flowIndex = cur.kind === "flow" ? cur.index : null;
@@ -107,7 +94,7 @@ export function LessonPlayer(props: Props) {
 
   return (
     <div
-      className="lesson"
+      className={`lesson${wide ? " wide" : ""}`}
       data-motion-root
       data-motion-mode="step"
       data-step-count={steps.length}
@@ -176,6 +163,20 @@ export function LessonPlayer(props: Props) {
                 ))}
               </div>
             )}
+            <button
+              type="button"
+              className="btn btn-icon"
+              aria-pressed={wide}
+              aria-label={
+                wide
+                  ? "Thu nhỏ khung minh hoạ (Esc)"
+                  : "Phóng to khung minh hoạ (F)"
+              }
+              title={wide ? "Thu nhỏ (Esc)" : "Phóng to (F)"}
+              onClick={toggleWide}
+            >
+              {wide ? <IconShrink size={14} /> : <IconExpand size={14} />}
+            </button>
             {!reduced && (
               <div className="controls" data-motion-controls>
                 <button
@@ -389,7 +390,8 @@ export function LessonPlayer(props: Props) {
           </div>
           <p className="kbd-hints">
             <kbd>←</kbd>
-            <kbd>→</kbd> bước · <kbd>R</kbd> lại · <kbd>Space</kbd> chạy
+            <kbd>→</kbd> bước · <kbd>R</kbd> lại · <kbd>Space</kbd> chạy ·{" "}
+            <kbd>F</kbd> phóng to
           </p>
           <p
             role="status"

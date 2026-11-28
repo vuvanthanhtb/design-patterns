@@ -10,7 +10,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * Để slug sai trả đúng HTTP 404, kiểm tra slug ở đây — trước khi render.
  *
  * Proxy không nên import module dùng chung, nên danh sách slug được ghi cứng.
- * Giữ đồng bộ với src/data/{creational,structural,behavioral}.ts và src/data/ml/lessons.ts.
+ * Giữ đồng bộ với src/data/{creational,structural,behavioral}.ts, src/data/arch/*.ts và src/data/ml/lessons.ts.
  */
 const PATTERN_SLUGS = new Set([
   "factory-method",
@@ -38,6 +38,24 @@ const PATTERN_SLUGS = new Set([
   "visitor",
 ]);
 
+const ARCH_SLUGS = new Set([
+  "cheatsheet", // trang tĩnh /architecture/cheatsheet
+  "layered",
+  "mvc",
+  "hexagonal",
+  "clean-architecture",
+  "microservices",
+  "api-gateway",
+  "event-driven",
+  "service-mesh",
+  "serverless",
+  "cqrs",
+  "event-sourcing",
+  "saga",
+  "circuit-breaker",
+  "strangler-fig",
+]);
+
 const ML_SLUGS = new Set([
   "cheatsheet", // trang tĩnh /ml/cheatsheet
   "gradient-descent",
@@ -58,7 +76,12 @@ const RESERVED = new Set(["opengraph-image", "twitter-image"]);
 
 export function proxy(request: NextRequest) {
   const [, course, slug = ""] = request.nextUrl.pathname.split("/");
-  const known = course === "ml" ? ML_SLUGS : PATTERN_SLUGS;
+  const known =
+    course === "ml"
+      ? ML_SLUGS
+      : course === "architecture"
+        ? ARCH_SLUGS
+        : PATTERN_SLUGS;
   if (!known.has(slug) && !RESERVED.has(slug)) {
     // Rewrite tới một đường dẫn không có route → Next render not-found với status 404
     return NextResponse.rewrite(new URL("/__not-found", request.url));
@@ -66,5 +89,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/patterns/:slug", "/ml/:slug"],
+  matcher: ["/patterns/:slug", "/architecture/:slug", "/ml/:slug"],
 };

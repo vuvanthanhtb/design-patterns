@@ -52,6 +52,16 @@
   --cat-foundation: #e8834d;
   --cat-supervised: #5fae57;
   --cat-unsupervised: #7c63d0;
+  --cat-arch-app: #5fae57;
+  --cat-arch-distributed: #7c63d0;
+  --cat-arch-data: #e8834d;
+
+  /* Màu gói tin trong sơ đồ kiến trúc */
+  --hop-request: #d0683a;
+  --hop-response: #3f8f4e;
+  --hop-event: #7c63d0;
+  --hop-fail: #c0392b;
+  --hop-compensate: #a5650c;
 
   /* Màu lớp / cụm trong biểu đồ ML */
   --cls0: #7c63d0;

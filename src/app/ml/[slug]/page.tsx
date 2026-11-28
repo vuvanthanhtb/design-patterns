@@ -11,7 +11,15 @@ import { MlLessonPlayer } from "@/components/ml/MlLessonPlayer";
 import { getMlLesson, ML_GROUP_NUM, ML_GROUPS, ML_LESSONS } from "@/data/ml";
 import { buildViz } from "@/lib/ml/viz";
 import { buildViz3D } from "@/lib/ml/viz3d";
-import { absoluteUrl, OG_BASE, SITE } from "@/lib/site";
+import {
+  absoluteUrl,
+  fitDescription,
+  fitTitle,
+  ORGANIZATION,
+  pageMetadata,
+  SITE,
+  codeSamples,
+} from "@/lib/site";
 
 type Params = PageProps<"/ml/[slug]">["params"];
 
@@ -25,34 +33,33 @@ export async function generateMetadata({
   const { slug } = await params;
   const found = getMlLesson(slug);
   if (!found) return { title: "Không tìm thấy", robots: { index: false } };
-  const l = found.lesson;
-  const title = `${l.name} (${l.viName}) — thuật toán ${l.task.toLowerCase()} trong Machine Learning`;
-  const description = `${l.intent} Mô phỏng từng bước và code Python từ đầu, đối chiếu scikit-learn.`;
-  const path = `/ml/${slug}`;
-  return {
-    title,
-    description,
+  const p = found.lesson;
+  return pageMetadata({
+    // "Tên (tên Việt) · Loại" — rút gọn khi vượt 65 ký tự
+    title: fitTitle([
+      `${p.name} (${p.viName}) · Machine Learning`,
+      `${p.name} · Machine Learning`,
+    ]),
+    description: fitDescription(
+      p.intent,
+      "Mô phỏng từng bước và code Python, đối chiếu scikit-learn.",
+    ),
+    path: `/ml/${slug}`,
+    type: "article",
+    image: {
+      url: `/ml/${slug}/og.png`,
+      alt: `${p.name} (${p.viName}) — thuật toán Machine Learning · mô phỏng từng bước, Python`,
+    },
+    section: "Machine Learning",
     keywords: [
-      l.name,
-      l.viName,
-      `${l.name} Python`,
-      `${l.name} scikit-learn`,
+      p.name,
+      p.viName,
+      `${p.name} Python`,
+      `${p.name} scikit-learn`,
       "machine learning",
       "học máy",
-      ...SITE.keywords,
     ],
-    alternates: { canonical: path },
-    openGraph: {
-      ...OG_BASE,
-      type: "article",
-      url: path,
-      title,
-      description,
-      section: "Machine Learning",
-      authors: [SITE.author],
-    },
-    twitter: { card: "summary_large_image", title, description },
-  };
+  });
 }
 
 /** Đọc params trong <Suspense> (Cache Components); mọi slug được prerender lúc build. */
@@ -82,13 +89,20 @@ async function Lesson({ params }: { params: Params }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
+      ...codeSamples(url, lesson.name, [
+        {
+          language: "Python",
+          runtime: "Python 3 · NumPy · scikit-learn",
+          file: example.file,
+        },
+      ]),
       {
         "@type": "LearningResource",
         "@id": `${url}#lesson`,
         name: `${lesson.name} — ${lesson.viName}`,
         description: lesson.intent,
         url,
-        image: absoluteUrl(`/ml/${slug}/opengraph-image`),
+        image: absoluteUrl(`/ml/${slug}/og.png`),
         inLanguage: SITE.language,
         learningResourceType: "Lesson",
         educationalLevel: "Beginner",
@@ -99,6 +113,8 @@ async function Lesson({ params }: { params: Params }) {
           { "@type": "Thing", name: lesson.name },
         ],
         author: { "@type": "Person", name: SITE.author },
+        provider: ORGANIZATION,
+        dateModified: SITE.updated,
         isPartOf: {
           "@type": "Course",
           "@id": absoluteUrl("/ml#course"),

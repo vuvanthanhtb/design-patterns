@@ -5,22 +5,17 @@
 
 import { CATEGORY_INFO } from "@/data/meta";
 import { getPattern, PATTERNS } from "@/data/patterns";
-import { OG_SIZE, renderOg } from "@/lib/og";
+import { renderOg } from "@/lib/og";
 
-export const alt = "Bài học mẫu thiết kế GoF";
-export const size = OG_SIZE;
-export const contentType = "image/png";
-
-// Render sẵn ảnh cho cả 23 bài lúc build
+// Ảnh chia sẻ 1200×630 — route handler + generateStaticParams nên được render sẵn cho cả 23 bài lúc build
 export function generateStaticParams() {
   return PATTERNS.map((p) => ({ slug: p.slug }));
 }
 
-export default async function Image({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
   const { slug } = await params;
   const found = getPattern(slug);
   if (!found) {

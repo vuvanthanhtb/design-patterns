@@ -7,6 +7,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { JetBrains_Mono } from "next/font/google";
 import { HeaderTabs } from "@/components/HeaderTabs";
+import { COURSE_LIST } from "@/data/courses";
 import { Logo } from "@/components/Icons";
 import { SearchBox } from "@/components/SearchBox";
 import { Sidebar } from "@/components/Sidebar";
@@ -92,7 +93,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <SearchBox />
             <ThemeToggle />
             <span className="made-by">
-              <small>2 khoá · 34 bài</small>
+              <small>
+                {COURSE_LIST.length} khoá ·{" "}
+                {COURSE_LIST.reduce((s, c) => s + c.items.length, 0)} bài
+              </small>
               <b>TS · Java · Py</b>
             </span>
           </div>

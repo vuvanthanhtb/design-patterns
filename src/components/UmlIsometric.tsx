@@ -78,6 +78,7 @@ export function UmlIsometric({ diagram, id, title }: Props) {
             title={title}
             legend={false}
             boxes={false}
+            crop={false}
           />
         </div>
         {diagram.classes.map((c) => {
